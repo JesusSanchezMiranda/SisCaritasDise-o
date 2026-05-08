@@ -98,7 +98,12 @@ export default function Home() {
             
             {/* Quick Actions */}
             <div>
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Acceso Rápido</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-gray-900">Acceso Rápido</h2>
+                <a href="/sections" className="text-sm text-primary hover:underline font-medium">
+                  Ver todas las secciones →
+                </a>
+              </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="group bg-white p-5 rounded-xl border border-gray-200 hover:border-primary/50 transition-all duration-300 cursor-pointer hover:shadow-lg">
                   <div className="flex items-center justify-between mb-4">
@@ -107,19 +112,23 @@ export default function Home() {
                     </div>
                     <ArrowUpRight size={18} className="text-gray-400 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Usuarios</h3>
-                  <p className="text-sm text-gray-500">Gestionar usuarios</p>
+                  <a href="/usuarios" className="block">
+                    <h3 className="font-semibold text-gray-900 mb-1">Usuarios</h3>
+                    <p className="text-sm text-gray-500">Gestionar usuarios</p>
+                  </a>
                 </div>
                 
-                <div className="group bg-white p-5 rounded-xl border border-gray-200 hover:border-blue-400/50 transition-all duration-300 cursor-pointer hover:shadow-lg">
+                <div className="group bg-white p-5 rounded-xl border border-gray-200 hover:border-pink-400/50 transition-all duration-300 cursor-pointer hover:shadow-lg">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                      <FileText className="w-6 h-6 text-blue-600" />
+                    <div className="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center group-hover:bg-pink-100 transition-colors">
+                      <Heart className="w-6 h-6 text-pink-600" />
                     </div>
-                    <ArrowUpRight size={18} className="text-gray-400 group-hover:text-blue-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                    <ArrowUpRight size={18} className="text-gray-400 group-hover:text-pink-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Reportes</h3>
-                  <p className="text-sm text-gray-500">Ver informes</p>
+                  <a href="/beneficiarios" className="block">
+                    <h3 className="font-semibold text-gray-900 mb-1">Beneficiarios</h3>
+                    <p className="text-sm text-gray-500">Gestionar beneficiarios</p>
+                  </a>
                 </div>
                 
                 <div className="group bg-white p-5 rounded-xl border border-gray-200 hover:border-emerald-400/50 transition-all duration-300 cursor-pointer hover:shadow-lg">
@@ -129,19 +138,23 @@ export default function Home() {
                     </div>
                     <ArrowUpRight size={18} className="text-gray-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Productos</h3>
-                  <p className="text-sm text-gray-500">Gestionar productos</p>
+                  <a href="/inventario" className="block">
+                    <h3 className="font-semibold text-gray-900 mb-1">Inventario</h3>
+                    <p className="text-sm text-gray-500">Gestionar inventario</p>
+                  </a>
                 </div>
                 
-                <div className="group bg-white p-5 rounded-xl border border-gray-200 hover:border-gray-400/50 transition-all duration-300 cursor-pointer hover:shadow-lg">
+                <div className="group bg-white p-5 rounded-xl border border-gray-200 hover:border-orange-400/50 transition-all duration-300 cursor-pointer hover:shadow-lg">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-gray-200 transition-colors">
-                      <Settings className="w-6 h-6 text-gray-600" />
+                    <div className="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center group-hover:bg-orange-100 transition-colors">
+                      <Settings className="w-6 h-6 text-orange-600" />
                     </div>
-                    <ArrowUpRight size={18} className="text-gray-400 group-hover:text-gray-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                    <ArrowUpRight size={18} className="text-gray-400 group-hover:text-orange-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Administración</h3>
-                  <p className="text-sm text-gray-500">Configurar sistema</p>
+                  <a href="/sections" className="block">
+                    <h3 className="font-semibold text-gray-900 mb-1">Más Secciones</h3>
+                    <p className="text-sm text-gray-500">Acceso a todos los módulos</p>
+                  </a>
                 </div>
               </div>
             </div>
