@@ -387,49 +387,49 @@ export function Sidebar() {
 
       {/* Profile Menu Dropdown */}
       {showProfileMenu && !isCollapsed && (
-        <div className="absolute bottom-20 left-3 right-3 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-in">
+        <div className="absolute bottom-20 left-4 w-52 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-in">
           {/* Profile Header */}
-          <div className="px-3 py-3 border-b border-gray-100 bg-gradient-to-br from-blue-50/50 to-white">
+          <div className="px-3 py-2.5 border-b border-gray-100 bg-gray-50/50">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center border border-blue-200">
-                  <span className="text-blue-600 font-bold text-sm">FG</span>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+                  <User size={16} className="text-primary" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900 text-sm">Familia Garcia</p>
-                  <p className="text-xs text-gray-500">Padre</p>
+                  <p className="font-semibold text-gray-900 text-sm">Administrador</p>
+                  <p className="text-[11px] text-gray-500">admin@caritas.org</p>
                 </div>
               </div>
               <button 
                 onClick={() => setShowProfileMenu(false)}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                className="p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
               >
-                <X size={16} />
+                <X size={14} />
               </button>
             </div>
           </div>
           
           {/* Menu Options */}
-          <div className="py-1.5">
-            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <User size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
+          <div className="py-1">
+            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <User size={15} className="text-gray-400 group-hover:text-primary transition-colors" />
               Mi perfil
             </button>
-            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <Settings size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
+            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <Settings size={15} className="text-gray-400 group-hover:text-primary transition-colors" />
               Configuración
             </button>
-            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <Bell size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
+            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <Bell size={15} className="text-gray-400 group-hover:text-primary transition-colors" />
               Notificaciones
             </button>
-            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <HelpCircle size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
+            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <HelpCircle size={15} className="text-gray-400 group-hover:text-primary transition-colors" />
               Ayuda
             </button>
-            <div className="my-1.5 border-t border-gray-100" />
-            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-primary hover:bg-primary/5 transition-colors font-medium">
-              <LogOut size={16} />
+            <div className="my-1 border-t border-gray-100" />
+            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary hover:bg-primary/5 transition-colors font-medium">
+              <LogOut size={15} />
               Cerrar sesión
             </button>
           </div>
@@ -439,7 +439,7 @@ export function Sidebar() {
       {/* Footer - Profile Selector */}
       <div className="border-t border-gray-100" ref={profileRef}>
         {isCollapsed ? (
-          <Tooltip text="Familia García - Padre" show={true}>
+          <Tooltip text="Administrador" show={true}>
             <button 
               onClick={() => {
                 setShowProfileMenu(!showProfileMenu)
@@ -448,8 +448,8 @@ export function Sidebar() {
               }}
               className="w-full flex items-center justify-center p-3 hover:bg-gray-50 transition-colors"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center border border-blue-200">
-                <span className="text-sm font-bold text-blue-600">FG</span>
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+                <User size={20} className="text-primary" />
               </div>
             </button>
           </Tooltip>
@@ -461,12 +461,12 @@ export function Sidebar() {
             }}
             className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center border border-blue-200 group-hover:shadow-md transition-shadow">
-              <span className="text-sm font-bold text-blue-600">FG</span>
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center group-hover:shadow-md transition-shadow">
+              <User size={20} className="text-primary" />
             </div>
             <div className="flex-1 text-left">
-              <p className="text-sm font-semibold text-gray-900">Familia García</p>
-              <p className="text-xs text-gray-500">Padre</p>
+              <p className="text-sm font-semibold text-gray-900">Administrador</p>
+              <p className="text-xs text-gray-500">admin@caritas.org</p>
             </div>
             <ChevronDown 
               size={18} 
