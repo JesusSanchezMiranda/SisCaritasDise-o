@@ -17,11 +17,6 @@ const montserrat = Montserrat({
   weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: "Sis Caritas - Sistema de Gestión",
   description: "Sistema de gestión médica para Cáritas",
