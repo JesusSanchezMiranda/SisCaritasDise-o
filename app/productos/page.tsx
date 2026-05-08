@@ -1,11 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { AppLayout } from "../app-layout"
+import { PageLayout } from "@/components/page-layout"
 import { DataTable, Column } from "@/components/data-table"
 import { CreateButton, SaveButton, CancelButton } from "@/components/crud-buttons"
 import { Modal } from "@/components/modal"
-import { Box, Download, Upload } from "lucide-react"
+import { Package, Download, Upload } from "lucide-react"
 
 interface Producto {
   id: string
@@ -20,7 +20,7 @@ interface Producto {
 const mockProductos: Producto[] = [
   { id: "1", productCode: "PROD001", productName: "Arroz", category: "ALIMENTOS", unit: "KG", estimatedValue: 3.50, status: "ACTIVE" },
   { id: "2", productCode: "PROD002", productName: "Abrigo", category: "ROPA_ABRIGO", unit: "UNIDAD", estimatedValue: 45.00, status: "ACTIVE" },
-  { id: "3", productCode: "PROD003", productName: "Jabón", category: "HIGIENE", unit: "UNIDAD", estimatedValue: 2.50, status: "ACTIVE" },
+  { id: "3", productCode: "PROD003", productName: "Jabon", category: "HIGIENE", unit: "UNIDAD", estimatedValue: 2.50, status: "ACTIVE" },
 ]
 
 export default function ProductosPage() {
@@ -39,12 +39,12 @@ export default function ProductosPage() {
   }
 
   const columns: Column<Producto>[] = [
-    { key: "productCode", label: "Código", width: "12%" },
+    { key: "productCode", label: "Codigo", width: "12%" },
     { key: "productName", label: "Nombre", width: "25%" },
-    { key: "category", label: "Categoría", width: "18%", render: (value) => <span className={`px-2 py-1 rounded text-sm ${categoryColors[value as keyof typeof categoryColors]}`}>{value}</span> },
+    { key: "category", label: "Categoria", width: "18%", render: (value) => <span className={`px-2 py-1 rounded text-sm ${categoryColors[value as keyof typeof categoryColors]}`}>{value}</span> },
     { key: "unit", label: "Unidad", width: "12%" },
     { key: "estimatedValue", label: "Valor Estimado", width: "15%", render: (value) => `S/. ${value.toFixed(2)}` },
-    { key: "status", label: "Estado", width: "18%", render: (value) => <span className={`px-2 py-1 rounded text-sm ${value === "ACTIVE" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{value}</span> },
+    { key: "status", label: "Estado", width: "18%", render: (value) => <span className={`px-2 py-1 rounded text-sm ${value === "ACTIVE" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{value === "ACTIVE" ? "Activo" : "Inactivo"}</span> },
   ]
 
   const handleCreate = () => {
@@ -78,66 +78,70 @@ export default function ProductosPage() {
   const totalValue = productos.reduce((sum, p) => sum + p.estimatedValue, 0)
   const activos = productos.filter((p) => p.status === "ACTIVE").length
 
-  const content = (
-    <div className="flex flex-col h-full">
-      <header className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-200 shrink-0">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-3 bg-lime-100 rounded-xl">
-              <Box size={24} className="text-lime-600" />
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900">Productos</h1>
+  return (
+    <PageLayout
+      title="Productos"
+      subtitle="Catalogo de bienes para inventario"
+      breadcrumbs={[{ label: "Productos" }, { label: "Catalogo" }]}
+    >
+      {/* Header Actions */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-red-50 rounded-xl">
+            <Package size={24} className="text-[#DC2626]" />
           </div>
-          <p className="text-sm text-gray-600">Catálogo de bienes para inventario</p>
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">Catalogo de Productos</h2>
+            <p className="text-sm text-gray-500">{productos.length} productos registrados</p>
+          </div>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
             <Download size={18} />
             Exportar
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
             <Upload size={18} />
             Importar
           </button>
           <CreateButton onClick={handleCreate} />
         </div>
-      </header>
+      </div>
 
-      <div className="flex-1 p-8 overflow-y-auto">
-        <div className="max-w-7xl mx-auto space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Total Productos</p>
-              <p className="text-2xl font-bold text-gray-900">{productos.length}</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Activos</p>
-              <p className="text-2xl font-bold text-green-600">{activos}</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Valor Total</p>
-              <p className="text-2xl font-bold text-blue-600">S/. {totalValue.toFixed(2)}</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Categorías</p>
-              <p className="text-2xl font-bold text-purple-600">6</p>
-            </div>
-          </div>
-
-          <DataTable<Producto>
-            columns={columns}
-            data={productos}
-            title="Catálogo de Productos"
-            searchPlaceholder="Buscar por código o nombre..."
-            searchFields={["productCode", "productName"]}
-            actions={(item) => [
-              { type: "edit", onClick: () => handleEdit(item.id), tooltip: "Editar" },
-              { type: "delete", onClick: () => handleDelete(item.id), tooltip: "Eliminar" },
-            ]}
-          />
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Total Productos</p>
+          <p className="text-2xl font-bold text-gray-900">{productos.length}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Activos</p>
+          <p className="text-2xl font-bold text-green-600">{activos}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Valor Total</p>
+          <p className="text-2xl font-bold text-blue-600">S/. {totalValue.toFixed(2)}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Categorias</p>
+          <p className="text-2xl font-bold text-[#DC2626]">6</p>
         </div>
       </div>
 
+      {/* Data Table */}
+      <DataTable<Producto>
+        columns={columns}
+        data={productos}
+        title="Catalogo de Productos"
+        searchPlaceholder="Buscar por codigo o nombre..."
+        searchFields={["productCode", "productName"]}
+        actions={(item) => [
+          { type: "edit", onClick: () => handleEdit(item.id), tooltip: "Editar" },
+          { type: "delete", onClick: () => handleDelete(item.id), tooltip: "Eliminar" },
+        ]}
+      />
+
+      {/* Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -147,18 +151,18 @@ export default function ProductosPage() {
       >
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <input type="text" placeholder="Código" value={formData.productCode || ""} onChange={(e) => setFormData({ ...formData, productCode: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <input type="text" placeholder="Nombre" value={formData.productName || ""} onChange={(e) => setFormData({ ...formData, productName: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <select value={formData.category || ""} onChange={(e) => setFormData({ ...formData, category: e.target.value as any })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500">
-              <option value="">Categoría</option>
+            <input type="text" placeholder="Codigo" value={formData.productCode || ""} onChange={(e) => setFormData({ ...formData, productCode: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <input type="text" placeholder="Nombre" value={formData.productName || ""} onChange={(e) => setFormData({ ...formData, productName: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <select value={formData.category || ""} onChange={(e) => setFormData({ ...formData, category: e.target.value as Producto["category"] })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]">
+              <option value="">Categoria</option>
               <option value="ALIMENTOS">Alimentos</option>
               <option value="ROPA_ABRIGO">Ropa/Abrigo</option>
               <option value="HIGIENE">Higiene</option>
-              <option value="UTILES_ESCOLARES">Útiles Escolares</option>
+              <option value="UTILES_ESCOLARES">Utiles Escolares</option>
               <option value="MEDICAMENTOS">Medicamentos</option>
               <option value="OTROS">Otros</option>
             </select>
-            <select value={formData.unit || ""} onChange={(e) => setFormData({ ...formData, unit: e.target.value as any })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500">
+            <select value={formData.unit || ""} onChange={(e) => setFormData({ ...formData, unit: e.target.value as Producto["unit"] })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]">
               <option value="">Unidad</option>
               <option value="KG">KG</option>
               <option value="LITRO">Litro</option>
@@ -167,8 +171,8 @@ export default function ProductosPage() {
               <option value="BOLSA">Bolsa</option>
               <option value="PAQUETE">Paquete</option>
             </select>
-            <input type="number" placeholder="Valor Estimado" value={formData.estimatedValue || ""} onChange={(e) => setFormData({ ...formData, estimatedValue: Number(e.target.value) })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <select value={formData.status || ""} onChange={(e) => setFormData({ ...formData, status: e.target.value as any })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500">
+            <input type="number" placeholder="Valor Estimado" value={formData.estimatedValue || ""} onChange={(e) => setFormData({ ...formData, estimatedValue: Number(e.target.value) })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <select value={formData.status || ""} onChange={(e) => setFormData({ ...formData, status: e.target.value as Producto["status"] })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]">
               <option value="">Estado</option>
               <option value="ACTIVE">Activo</option>
               <option value="INACTIVE">Inactivo</option>
@@ -176,8 +180,6 @@ export default function ProductosPage() {
           </div>
         </div>
       </Modal>
-    </div>
+    </PageLayout>
   )
-
-  return <AppLayout>{content}</AppLayout>
 }

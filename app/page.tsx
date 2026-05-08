@@ -4,7 +4,6 @@ import { Sidebar } from "@/components/sidebar"
 import { 
   Users, 
   FileText, 
-  Settings, 
   TrendingUp, 
   Calendar, 
   ArrowUpRight, 
@@ -13,23 +12,47 @@ import {
   Heart, 
   Stethoscope, 
   Package,
+  Search,
+  Bell,
+  ChevronRight,
 } from "lucide-react"
 
 export default function Home() {
   return (
-    <div className="flex w-full h-screen bg-gray-50 overflow-hidden">
+    <div className="flex w-full h-screen bg-[#F9FAFB] overflow-hidden">
       <Sidebar />
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Header */}
         <header className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-200 shrink-0">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-sm text-gray-500">Panel de control del sistema Cáritas</p>
+          <div className="flex items-center gap-4">
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-sm">
+              <span className="text-gray-400">Inicio</span>
+              <ChevronRight size={14} className="text-gray-400" />
+              <span className="text-gray-900 font-medium">Dashboard</span>
+            </nav>
           </div>
           
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-600">
-              <Calendar size={16} className="text-primary" />
+          <div className="flex items-center gap-4">
+            {/* Search */}
+            <div className="relative">
+              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input 
+                type="text"
+                placeholder="Buscar..."
+                className="w-64 pl-10 pr-4 py-2 rounded-lg border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] transition-all"
+              />
+            </div>
+            
+            {/* Notifications */}
+            <button className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <Bell size={20} className="text-gray-600" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-[#DC2626] rounded-full"></span>
+            </button>
+            
+            {/* Date */}
+            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 text-sm text-gray-600">
+              <Calendar size={16} className="text-[#DC2626]" />
               <span className="capitalize">{new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' })}</span>
             </div>
           </div>
@@ -38,12 +61,18 @@ export default function Home() {
         {/* Main Content */}
         <div className="flex-1 p-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto space-y-6">
+            {/* Page Title */}
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+              <p className="text-sm text-gray-500 mt-1">Panel de control del sistema SisCaritas</p>
+            </div>
+            
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              <div className="group bg-white p-6 rounded-2xl border border-gray-200 hover:border-primary/50 hover:shadow-lg transition-all duration-300 cursor-pointer">
+              <div className="group bg-white p-6 rounded-2xl border border-gray-200 hover:border-[#DC2626]/50 hover:shadow-lg transition-all duration-300 cursor-pointer">
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-3 rounded-xl bg-red-50 group-hover:bg-red-100 transition-colors">
-                    <Users size={24} className="text-primary" />
+                    <Users size={24} className="text-[#DC2626]" />
                   </div>
                   <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-emerald-50 text-xs font-semibold text-emerald-600">
                     <TrendingUp size={12} />
@@ -99,18 +128,18 @@ export default function Home() {
             {/* Quick Actions */}
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-gray-900">Acceso Rápido</h2>
-                <a href="/sections" className="text-sm text-primary hover:underline font-medium">
-                  Ver todas las secciones →
+                <h2 className="text-lg font-bold text-gray-900">Acceso Rapido</h2>
+                <a href="/sections" className="text-sm text-[#DC2626] hover:underline font-medium">
+                  Ver todas las secciones
                 </a>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="group bg-white p-5 rounded-xl border border-gray-200 hover:border-primary/50 transition-all duration-300 cursor-pointer hover:shadow-lg">
+                <div className="group bg-white p-5 rounded-xl border border-gray-200 hover:border-[#DC2626]/50 transition-all duration-300 cursor-pointer hover:shadow-lg">
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center group-hover:bg-red-100 transition-colors">
-                      <Users className="w-6 h-6 text-primary" />
+                      <Users className="w-6 h-6 text-[#DC2626]" />
                     </div>
-                    <ArrowUpRight size={18} className="text-gray-400 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                    <ArrowUpRight size={18} className="text-gray-400 group-hover:text-[#DC2626] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
                   <a href="/usuarios" className="block">
                     <h3 className="font-semibold text-gray-900 mb-1">Usuarios</h3>
@@ -144,16 +173,16 @@ export default function Home() {
                   </a>
                 </div>
                 
-                <div className="group bg-white p-5 rounded-xl border border-gray-200 hover:border-orange-400/50 transition-all duration-300 cursor-pointer hover:shadow-lg">
+                <div className="group bg-white p-5 rounded-xl border border-gray-200 hover:border-[#DC2626]/50 transition-all duration-300 cursor-pointer hover:shadow-lg">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center group-hover:bg-orange-100 transition-colors">
-                      <Settings className="w-6 h-6 text-orange-600" />
+                    <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center group-hover:bg-red-100 transition-colors">
+                      <Stethoscope className="w-6 h-6 text-[#DC2626]" />
                     </div>
-                    <ArrowUpRight size={18} className="text-gray-400 group-hover:text-orange-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                    <ArrowUpRight size={18} className="text-gray-400 group-hover:text-[#DC2626] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
-                  <a href="/sections" className="block">
-                    <h3 className="font-semibold text-gray-900 mb-1">Más Secciones</h3>
-                    <p className="text-sm text-gray-500">Acceso a todos los módulos</p>
+                  <a href="/atencion-medica" className="block">
+                    <h3 className="font-semibold text-gray-900 mb-1">Clinica</h3>
+                    <p className="text-sm text-gray-500">Atencion medica</p>
                   </a>
                 </div>
               </div>
@@ -165,8 +194,8 @@ export default function Home() {
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="divide-y divide-gray-100">
                   {[
-                    { icon: <UserCheck size={18} />, action: "Nuevo paciente registrado", name: "María González", time: "Hace 5 min", color: "bg-red-50 text-primary" },
-                    { icon: <Stethoscope size={18} />, action: "Consulta completada", name: "Dr. Juan Pérez", time: "Hace 12 min", color: "bg-emerald-50 text-emerald-600" },
+                    { icon: <UserCheck size={18} />, action: "Nuevo paciente registrado", name: "Maria Gonzalez", time: "Hace 5 min", color: "bg-red-50 text-[#DC2626]" },
+                    { icon: <Stethoscope size={18} />, action: "Consulta completada", name: "Dr. Juan Perez", time: "Hace 12 min", color: "bg-emerald-50 text-emerald-600" },
                     { icon: <FileText size={18} />, action: "Reporte generado", name: "Ventas Marzo 2024", time: "Hace 1 hora", color: "bg-blue-50 text-blue-600" },
                     { icon: <Heart size={18} />, action: "Terapia programada", name: "Carlos Mendoza", time: "Hace 2 horas", color: "bg-pink-50 text-pink-600" },
                     { icon: <Activity size={18} />, action: "Laboratorio actualizado", name: "Resultados pendientes", time: "Hace 3 horas", color: "bg-amber-50 text-amber-600" },

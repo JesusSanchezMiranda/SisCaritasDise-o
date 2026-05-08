@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { PageLayout } from "@/components/page-layout"
 import { DataTable, Column } from "@/components/data-table"
 import { CreateButton, SaveButton, CancelButton } from "@/components/crud-buttons"
 import { Modal } from "@/components/modal"
@@ -26,10 +27,10 @@ interface Campana {
 const mockCampanas: Campana[] = [
   {
     id: "1",
-    campaignName: "Campaña de Alimentos Marzo",
+    campaignName: "Campana de Alimentos Marzo",
     campaignNumber: "CAM-2024-001",
     domain: "SOCIAL",
-    description: "Recolección de alimentos para familias en situación de pobreza",
+    description: "Recoleccion de alimentos para familias en situacion de pobreza",
     location: "San Isidro, Lima",
     startDate: "2024-03-01",
     endDate: "2024-03-31",
@@ -42,11 +43,11 @@ const mockCampanas: Campana[] = [
   },
   {
     id: "2",
-    campaignName: "Campaña de Oftalmología",
+    campaignName: "Campana de Oftalmologia",
     campaignNumber: "CAM-2024-002",
     domain: "SALUD",
-    description: "Jornada de atención oftalmológica gratuita",
-    location: "Centro de Salud Cáritas",
+    description: "Jornada de atencion oftalmologica gratuita",
+    location: "Centro de Salud Caritas",
     startDate: "2024-03-10",
     endDate: "2024-03-15",
     budget: 30000,
@@ -64,7 +65,7 @@ export default function CampanasPage() {
   const [formData, setFormData] = useState<Partial<Campana>>({})
 
   const columns: Column<Campana>[] = [
-    { key: "campaignNumber", label: "Número", sortable: true, width: "120px" },
+    { key: "campaignNumber", label: "Numero", sortable: true, width: "120px" },
     { key: "campaignName", label: "Nombre", sortable: true },
     {
       key: "domain",
@@ -79,7 +80,7 @@ export default function CampanasPage() {
         </span>
       ),
     },
-    { key: "location", label: "Ubicación" },
+    { key: "location", label: "Ubicacion" },
     {
       key: "status",
       label: "Estado",
@@ -104,11 +105,6 @@ export default function CampanasPage() {
       label: "Presupuesto",
       render: (value) => `S/. ${value.toLocaleString("es-PE")}`,
     },
-    {
-      key: "spent",
-      label: "Gastado",
-      render: (value) => `S/. ${value.toLocaleString("es-PE")}`,
-    },
   ]
 
   const handleCreate = () => {
@@ -127,7 +123,7 @@ export default function CampanasPage() {
   }
 
   const handleDelete = (id: string) => {
-    if (confirm("¿Estás seguro de que deseas eliminar esta campaña?")) {
+    if (confirm("Estas seguro de que deseas eliminar esta campana?")) {
       setCampanas(campanas.filter((c) => c.id !== id))
     }
   }
@@ -163,93 +159,95 @@ export default function CampanasPage() {
   const totalSpent = campanas.reduce((sum, c) => sum + c.spent, 0)
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+    <PageLayout
+      title="Campanas"
+      subtitle="Gestiona campanas sociales y de salud"
+      breadcrumbs={[{ label: "Social" }, { label: "Campanas" }]}
+    >
+      {/* Header Actions */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-red-50 rounded-xl">
+            <Flag size={24} className="text-[#DC2626]" />
+          </div>
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-3 bg-orange-100 rounded-xl">
-                <Flag size={24} className="text-orange-600" />
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900">Campañas</h1>
-            </div>
-            <p className="text-gray-600">Gestiona campañas sociales y de salud</p>
-          </div>
-          <div className="flex gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-              <Download size={18} />
-              Exportar
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-              <Upload size={18} />
-              Importar
-            </button>
-            <CreateButton onClick={handleCreate} />
+            <h2 className="text-lg font-semibold text-gray-900">Lista de Campanas</h2>
+            <p className="text-sm text-gray-500">{campanas.length} campanas registradas</p>
           </div>
         </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Total Campañas</p>
-            <p className="text-2xl font-bold text-gray-900">{campanas.length}</p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">En Progreso</p>
-            <p className="text-2xl font-bold text-orange-600">
-              {campanas.filter((c) => c.status === "IN_PROGRESS").length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Completadas</p>
-            <p className="text-2xl font-bold text-green-600">
-              {campanas.filter((c) => c.status === "COMPLETED").length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Presupuesto Total</p>
-            <p className="text-xl font-bold text-gray-900">S/. {totalBudget.toLocaleString("es-PE")}</p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Gastado</p>
-            <p className="text-xl font-bold text-red-600">S/. {totalSpent.toLocaleString("es-PE")}</p>
-          </div>
+        <div className="flex gap-3">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
+            <Download size={18} />
+            Exportar
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
+            <Upload size={18} />
+            Importar
+          </button>
+          <CreateButton onClick={handleCreate} />
         </div>
-
-        {/* Data Table */}
-        <DataTable<Campana>
-          columns={columns}
-          data={campanas}
-          title="Lista de Campañas"
-          searchPlaceholder="Buscar por nombre, número o ubicación..."
-          searchFields={["campaignName", "campaignNumber", "location"]}
-          emptyMessage="No hay campañas registradas"
-          actions={(item) => [
-            {
-              type: "view",
-              onClick: () => handleEdit(item.id),
-              tooltip: "Ver detalles",
-            },
-            {
-              type: "edit",
-              onClick: () => handleEdit(item.id),
-              tooltip: "Editar",
-            },
-            {
-              type: "delete",
-              onClick: () => handleDelete(item.id),
-              tooltip: "Eliminar",
-            },
-          ]}
-        />
       </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Total Campanas</p>
+          <p className="text-2xl font-bold text-gray-900">{campanas.length}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">En Progreso</p>
+          <p className="text-2xl font-bold text-orange-600">
+            {campanas.filter((c) => c.status === "IN_PROGRESS").length}
+          </p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Completadas</p>
+          <p className="text-2xl font-bold text-green-600">
+            {campanas.filter((c) => c.status === "COMPLETED").length}
+          </p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Presupuesto Total</p>
+          <p className="text-xl font-bold text-gray-900">S/. {totalBudget.toLocaleString("es-PE")}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Gastado</p>
+          <p className="text-xl font-bold text-[#DC2626]">S/. {totalSpent.toLocaleString("es-PE")}</p>
+        </div>
+      </div>
+
+      {/* Data Table */}
+      <DataTable<Campana>
+        columns={columns}
+        data={campanas}
+        title="Lista de Campanas"
+        searchPlaceholder="Buscar por nombre, numero o ubicacion..."
+        searchFields={["campaignName", "campaignNumber", "location"]}
+        emptyMessage="No hay campanas registradas"
+        actions={(item) => [
+          {
+            type: "view",
+            onClick: () => handleEdit(item.id),
+            tooltip: "Ver detalles",
+          },
+          {
+            type: "edit",
+            onClick: () => handleEdit(item.id),
+            tooltip: "Editar",
+          },
+          {
+            type: "delete",
+            onClick: () => handleDelete(item.id),
+            tooltip: "Eliminar",
+          },
+        ]}
+      />
 
       {/* Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={editingId ? "Editar Campaña" : "Crear Nueva Campaña"}
+        title={editingId ? "Editar Campana" : "Crear Nueva Campana"}
         size="lg"
         footer={
           <>
@@ -262,22 +260,22 @@ export default function CampanasPage() {
           <div className="grid grid-cols-2 gap-4">
             <input
               type="text"
-              placeholder="Nombre de Campaña"
+              placeholder="Nombre de Campana"
               value={formData.campaignName || ""}
               onChange={(e) => setFormData({ ...formData, campaignName: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="text"
-              placeholder="Número de Campaña"
+              placeholder="Numero de Campana"
               value={formData.campaignNumber || ""}
               onChange={(e) => setFormData({ ...formData, campaignNumber: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <select
               value={formData.domain || ""}
-              onChange={(e) => setFormData({ ...formData, domain: e.target.value as any })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              onChange={(e) => setFormData({ ...formData, domain: e.target.value as Campana["domain"] })}
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             >
               <option value="">Seleccionar dominio</option>
               <option value="SOCIAL">Social</option>
@@ -285,49 +283,49 @@ export default function CampanasPage() {
             </select>
             <input
               type="text"
-              placeholder="Ubicación"
+              placeholder="Ubicacion"
               value={formData.location || ""}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="date"
               placeholder="Fecha Inicio"
               value={formData.startDate || ""}
               onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="date"
               placeholder="Fecha Fin"
               value={formData.endDate || ""}
               onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="number"
               placeholder="Presupuesto"
               value={formData.budget || ""}
               onChange={(e) => setFormData({ ...formData, budget: parseFloat(e.target.value) })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="number"
               placeholder="Gastado"
               value={formData.spent || ""}
               onChange={(e) => setFormData({ ...formData, spent: parseFloat(e.target.value) })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
           </div>
           <textarea
-            placeholder="Descripción"
+            placeholder="Descripcion"
             value={formData.description || ""}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             rows={3}
           />
         </div>
       </Modal>
-    </div>
+    </PageLayout>
   )
 }

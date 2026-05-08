@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { PageLayout } from "@/components/page-layout"
 import { DataTable, Column } from "@/components/data-table"
 import { CreateButton, SaveButton, CancelButton } from "@/components/crud-buttons"
 import { Modal } from "@/components/modal"
@@ -89,7 +90,7 @@ export default function UsuariosPage() {
     },
     {
       key: "lastLogin",
-      label: "Último acceso",
+      label: "Ultimo acceso",
       render: (value) => {
         const date = new Date(value)
         return date.toLocaleDateString("es-ES") + " " + date.toLocaleTimeString("es-ES")
@@ -113,7 +114,7 @@ export default function UsuariosPage() {
   }
 
   const handleDelete = (id: string) => {
-    if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+    if (confirm("Estas seguro de que deseas eliminar este usuario?")) {
       setUsuarios(usuarios.filter((u) => u.id !== id))
     }
   }
@@ -144,91 +145,93 @@ export default function UsuariosPage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+    <PageLayout 
+      title="Usuarios del Sistema"
+      subtitle="Gestiona usuarios y roles del sistema"
+      breadcrumbs={[{ label: "Personas" }, { label: "Usuarios Sistema" }]}
+    >
+      {/* Header Actions */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-red-50 rounded-xl">
+            <Users size={24} className="text-[#DC2626]" />
+          </div>
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-3 bg-blue-100 rounded-xl">
-                <Users size={24} className="text-blue-600" />
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900">Usuarios</h1>
-            </div>
-            <p className="text-gray-600">Gestiona usuarios y roles del sistema</p>
-          </div>
-          <div className="flex gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-              <Download size={18} />
-              Exportar
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-              <Upload size={18} />
-              Importar
-            </button>
-            <CreateButton onClick={handleCreate} />
+            <h2 className="text-lg font-semibold text-gray-900">Lista de Usuarios</h2>
+            <p className="text-sm text-gray-500">{usuarios.length} usuarios registrados</p>
           </div>
         </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Total Usuarios</p>
-            <p className="text-2xl font-bold text-gray-900">{usuarios.length}</p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Administradores</p>
-            <p className="text-2xl font-bold text-red-600">
-              {usuarios.filter((u) => u.role === "ADMIN").length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Coordinadores</p>
-            <p className="text-2xl font-bold text-blue-600">
-              {usuarios.filter((u) => u.role === "COORDINADOR").length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Contadores</p>
-            <p className="text-2xl font-bold text-purple-600">
-              {usuarios.filter((u) => u.role === "CONTADOR").length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Activos</p>
-            <p className="text-2xl font-bold text-green-600">
-              {usuarios.filter((u) => u.status === "ACTIVE").length}
-            </p>
-          </div>
+        <div className="flex gap-3">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
+            <Download size={18} />
+            Exportar
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
+            <Upload size={18} />
+            Importar
+          </button>
+          <CreateButton onClick={handleCreate} />
         </div>
-
-        {/* Data Table */}
-        <DataTable<Usuario>
-          columns={columns}
-          data={usuarios}
-          title="Lista de Usuarios"
-          searchPlaceholder="Buscar por usuario, nombre o email..."
-          searchFields={["username", "firstName", "lastName", "email"]}
-          emptyMessage="No hay usuarios registrados"
-          actions={(item) => [
-            {
-              type: "view",
-              onClick: () => handleEdit(item.id),
-              tooltip: "Ver detalles",
-            },
-            {
-              type: "edit",
-              onClick: () => handleEdit(item.id),
-              tooltip: "Editar",
-            },
-            {
-              type: "delete",
-              onClick: () => handleDelete(item.id),
-              tooltip: "Eliminar",
-            },
-          ]}
-        />
       </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Total Usuarios</p>
+          <p className="text-2xl font-bold text-gray-900">{usuarios.length}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Administradores</p>
+          <p className="text-2xl font-bold text-[#DC2626]">
+            {usuarios.filter((u) => u.role === "ADMIN").length}
+          </p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Coordinadores</p>
+          <p className="text-2xl font-bold text-blue-600">
+            {usuarios.filter((u) => u.role === "COORDINADOR").length}
+          </p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Contadores</p>
+          <p className="text-2xl font-bold text-purple-600">
+            {usuarios.filter((u) => u.role === "CONTADOR").length}
+          </p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Activos</p>
+          <p className="text-2xl font-bold text-green-600">
+            {usuarios.filter((u) => u.status === "ACTIVE").length}
+          </p>
+        </div>
+      </div>
+
+      {/* Data Table */}
+      <DataTable<Usuario>
+        columns={columns}
+        data={usuarios}
+        title="Lista de Usuarios"
+        searchPlaceholder="Buscar por usuario, nombre o email..."
+        searchFields={["username", "firstName", "lastName", "email"]}
+        emptyMessage="No hay usuarios registrados"
+        actions={(item) => [
+          {
+            type: "view",
+            onClick: () => handleEdit(item.id),
+            tooltip: "Ver detalles",
+          },
+          {
+            type: "edit",
+            onClick: () => handleEdit(item.id),
+            tooltip: "Editar",
+          },
+          {
+            type: "delete",
+            onClick: () => handleDelete(item.id),
+            tooltip: "Eliminar",
+          },
+        ]}
+      />
 
       {/* Modal */}
       <Modal
@@ -250,40 +253,40 @@ export default function UsuariosPage() {
               placeholder="Nombre"
               value={formData.firstName || ""}
               onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="text"
               placeholder="Apellido"
               value={formData.lastName || ""}
               onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="text"
               placeholder="Usuario"
               value={formData.username || ""}
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="email"
               placeholder="Email"
               value={formData.email || ""}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="tel"
-              placeholder="Teléfono"
+              placeholder="Telefono"
               value={formData.phone || ""}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <select
               value={formData.role || ""}
-              onChange={(e) => setFormData({ ...formData, role: e.target.value as any })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              onChange={(e) => setFormData({ ...formData, role: e.target.value as Usuario["role"] })}
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             >
               <option value="">Seleccionar rol</option>
               <option value="ADMIN">Administrador</option>
@@ -294,6 +297,6 @@ export default function UsuariosPage() {
           </div>
         </div>
       </Modal>
-    </div>
+    </PageLayout>
   )
 }
