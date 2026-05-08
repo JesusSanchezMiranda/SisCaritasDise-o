@@ -135,7 +135,7 @@ function Tooltip({ children, text, show }: { children: React.ReactNode; text: st
   )
 }
 
-function DirectMenuItem({ 
+function DirectMenuItemComponent({ 
   item, 
   activeItem, 
   setActiveItem,
@@ -440,7 +440,7 @@ export function Sidebar() {
       <nav className="flex-1 overflow-y-auto py-4 scrollbar-thin">
         {/* Direct Items (Dashboard) */}
         {directItems.map((item) => (
-          <DirectMenuItem
+          <DirectMenuItemComponent
             key={item.id}
             item={item}
             activeItem={activeItem}
