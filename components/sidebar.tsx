@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import Image from "next/image"
 import {
   Users,
@@ -35,6 +36,13 @@ import {
   Mail,
   ChevronLeft,
   Menu,
+  Flag,
+  Gift,
+  CreditCard,
+  Warehouse,
+  TrendingUp,
+  Briefcase,
+  FolderOpen,
 } from "lucide-react"
 
 interface SubMenuItem {
@@ -66,56 +74,46 @@ const directItems: DirectMenuItem[] = [
 
 const menuItems: MenuItem[] = [
   {
-    id: "usuarios",
-    label: "USUARIOS",
+    id: "gestion",
+    label: "GESTIÓN",
     icon: <Users size={18} />,
     children: [
-      { label: "Proveedores", icon: <Truck size={18} />, href: "/usuarios/proveedores" },
-      { label: "Pacientes", icon: <UserCheck size={18} />, href: "/usuarios/pacientes", badge: "128" },
-      { label: "Médicos", icon: <Stethoscope size={18} />, href: "/usuarios/medicos" },
+      { label: "Usuarios", icon: <Users size={18} />, href: "/usuarios" },
+      { label: "Beneficiarios", icon: <Heart size={18} />, href: "/beneficiarios" },
+      { label: "Voluntarios", icon: <UserCheck size={18} />, href: "/voluntarios" },
+      { label: "Especialidades", icon: <Briefcase size={18} />, href: "/especialidades" },
+      { label: "Proyectos", icon: <FolderOpen size={18} />, href: "/proyectos" },
     ],
   },
   {
-    id: "reportes",
-    label: "REPORTES",
-    icon: <FileText size={18} />,
+    id: "campanas",
+    label: "CAMPAÑAS",
+    icon: <Flag size={18} />,
     children: [
-      { label: "Ventas Médicas", icon: <ShoppingCart size={18} />, href: "/reportes/ventas-medicas" },
-      { label: "Compras Médicas", icon: <ShoppingBag size={18} />, href: "/reportes/compras-medicas" },
-      { label: "Laboratorio", icon: <FlaskConical size={18} />, href: "/reportes/laboratorio" },
-      { label: "Productos", icon: <Package size={18} />, href: "/reportes/productos" },
-      { label: "Tratamientos", icon: <Pill size={18} />, href: "/reportes/tratamientos" },
-      { label: "Consultas", icon: <ClipboardList size={18} />, href: "/reportes/consultas" },
-      { label: "Terapias", icon: <Activity size={18} />, href: "/reportes/terapias" },
-      { label: "Pacientes", icon: <Heart size={18} />, href: "/reportes/pacientes" },
-      { label: "Ranking", icon: <Trophy size={18} />, href: "/reportes/ranking" },
+      { label: "Campañas", icon: <Flag size={18} />, href: "/campanas" },
+      { label: "Donantes", icon: <Gift size={18} />, href: "/donantes" },
+      { label: "Donaciones", icon: <CreditCard size={18} />, href: "/donaciones" },
     ],
   },
   {
-    id: "productos",
-    label: "PRODUCTOS",
-    icon: <Package size={18} />,
+    id: "inventario",
+    label: "INVENTARIO",
+    icon: <Warehouse size={18} />,
     children: [
-      { label: "Tratamientos", icon: <Pill size={18} />, href: "/productos/tratamientos" },
-      { label: "Consultas", icon: <ClipboardList size={18} />, href: "/productos/consultas" },
-      { label: "Terapias", icon: <Activity size={18} />, href: "/productos/terapias" },
-      { label: "Medicamentos", icon: <PillBottle size={18} />, href: "/productos/medicamentos" },
-      { label: "Kits Laboratorio", icon: <Boxes size={18} />, href: "/productos/kits-laboratorio" },
+      { label: "Productos", icon: <Package size={18} />, href: "/productos" },
+      { label: "Inventario", icon: <Warehouse size={18} />, href: "/inventario" },
+      { label: "Movimientos", icon: <TrendingUp size={18} />, href: "/movimientos" },
+      { label: "Distribuciones", icon: <Truck size={18} />, href: "/distribuciones" },
     ],
   },
   {
-    id: "administracion",
-    label: "ADMINISTRACIÓN",
-    icon: <Settings size={18} />,
+    id: "salud",
+    label: "SALUD",
+    icon: <Stethoscope size={18} />,
     children: [
-      { label: "Especialidades", icon: <Layers size={18} />, href: "/administracion/especialidades" },
-      { label: "Tipo de Cliente", icon: <Tag size={18} />, href: "/administracion/tipo-cliente" },
-      { label: "Precios de Terapias", icon: <DollarSign size={18} />, href: "/administracion/precios-terapias" },
-      { label: "Precio de Consultas", icon: <DollarSign size={18} />, href: "/administracion/precio-consultas" },
-      { label: "Pruebas Laboratorio", icon: <TestTube size={18} />, href: "/administracion/pruebas-laboratorio" },
-      { label: "Kits Laboratorio", icon: <Boxes size={18} />, href: "/administracion/kits-laboratorio" },
-      { label: "Precios de Productos", icon: <DollarSign size={18} />, href: "/administracion/precios-productos" },
-      { label: "Compras", icon: <ShoppingCart size={18} />, href: "/administracion/compras" },
+      { label: "Personal Médico", icon: <Stethoscope size={18} />, href: "/personal-medico" },
+      { label: "Atención Médica", icon: <Activity size={18} />, href: "/atencion-salud" },
+      { label: "Ventas", icon: <ShoppingCart size={18} />, href: "/ventas" },
     ],
   },
 ]
@@ -137,27 +135,29 @@ function Tooltip({ children, text, show }: { children: React.ReactNode; text: st
 
 function DirectMenuItemComponent({ 
   item, 
-  activeItem, 
-  setActiveItem,
+  isActive,
   isCollapsed,
 }: { 
   item: DirectMenuItem
-  activeItem: string | null
-  setActiveItem: (item: string | null) => void
+  isActive: boolean
   isCollapsed: boolean
 }) {
+  const router = useRouter()
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    router.push(item.href)
+  }
+
   if (isCollapsed) {
     return (
       <div className="mb-2 px-2">
         <Tooltip text={item.label} show={isCollapsed}>
           <a
             href={item.href}
-            onClick={(e) => {
-              e.preventDefault()
-              setActiveItem(item.label)
-            }}
+            onClick={handleClick}
             className={`w-full flex items-center justify-center p-3 rounded-xl transition-all duration-200 ${
-              activeItem === item.label
+              isActive
                 ? "bg-primary text-white shadow-lg shadow-primary/25"
                 : "text-gray-500 hover:bg-gray-100 hover:text-primary"
             }`}
@@ -173,18 +173,15 @@ function DirectMenuItemComponent({
     <div className="mb-2 px-2">
       <a
         href={item.href}
-        onClick={(e) => {
-          e.preventDefault()
-          setActiveItem(item.label)
-        }}
+        onClick={handleClick}
         className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
-          activeItem === item.label
+          isActive
             ? "bg-primary text-white shadow-lg shadow-primary/25"
             : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
         }`}
       >
         <span className={`transition-transform duration-200 group-hover:scale-110 ${
-          activeItem === item.label ? "text-white" : "text-gray-400 group-hover:text-primary"
+          isActive ? "text-white" : "text-gray-400 group-hover:text-primary"
         }`}>
           {item.icon}
         </span>
@@ -198,17 +195,22 @@ function MenuSection({
   item, 
   isExpanded, 
   onToggle, 
-  activeItem, 
-  setActiveItem,
+  activeChild,
   isCollapsed,
 }: { 
   item: MenuItem
   isExpanded: boolean
   onToggle: () => void
-  activeItem: string | null
-  setActiveItem: (item: string | null) => void
+  activeChild: string | null
   isCollapsed: boolean
 }) {
+  const router = useRouter()
+
+  const handleChildClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    router.push(href)
+  }
+
   // In collapsed mode, show only the section icon
   if (isCollapsed) {
     return (
@@ -255,25 +257,22 @@ function MenuSection({
             <a
               key={index}
               href={child.href}
-              onClick={(e) => {
-                e.preventDefault()
-                setActiveItem(child.label)
-              }}
+              onClick={(e) => handleChildClick(e, child.href)}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
-                activeItem === child.label
+                activeChild === child.href
                   ? "bg-primary text-white shadow-lg shadow-primary/25"
                   : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
               }`}
             >
               <span className={`transition-transform duration-200 group-hover:scale-110 ${
-                activeItem === child.label ? "text-white" : "text-gray-400 group-hover:text-primary"
+                activeChild === child.href ? "text-white" : "text-gray-400 group-hover:text-primary"
               }`}>
                 {child.icon}
               </span>
               <span className="flex-1">{child.label}</span>
               {child.badge && (
                 <span className={`px-2 py-0.5 text-xs font-bold rounded-full transition-colors ${
-                  activeItem === child.label 
+                  activeChild === child.href 
                     ? "bg-white/20 text-white" 
                     : "bg-primary/10 text-primary"
                 }`}>
@@ -289,13 +288,31 @@ function MenuSection({
 }
 
 export function Sidebar() {
-  const [isCollapsed, setIsCollapsed] = useState(false)
-  const [expandedSections, setExpandedSections] = useState<string[]>(["usuarios"])
-  const [activeItem, setActiveItem] = useState<string | null>("Dashboard")
+  const pathname = usePathname()
+  const [isCollapsed, setIsCollapsed] = useState(true)
+  const [expandedSections, setExpandedSections] = useState<string[]>([])
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
   const notificationRef = useRef<HTMLDivElement>(null)
+
+  // Auto-expand sidebar y sección cuando se navega
+  useEffect(() => {
+    const currentPath = pathname.split('/')[1]
+    
+    // Encontrar qué sección contiene este path
+    menuItems.forEach(section => {
+      const hasChild = section.children.some(child => child.href.includes(currentPath))
+      if (hasChild) {
+        // Expandir el sidebar
+        if (isCollapsed) setIsCollapsed(false)
+        // Expandir la sección
+        if (!expandedSections.includes(section.id)) {
+          setExpandedSections(prev => [...prev, section.id])
+        }
+      }
+    })
+  }, [pathname])
 
   const toggleSection = (id: string) => {
     setExpandedSections(prev => 
@@ -303,6 +320,18 @@ export function Sidebar() {
         ? prev.filter(s => s !== id) 
         : [...prev, id]
     )
+  }
+
+  // Determinar si el dashboard está activo
+  const isDashboardActive = pathname === "/" || pathname === "/dashboard"
+
+  // Determinar qué item está activo en las secciones
+  const getActiveChild = () => {
+    for (const section of menuItems) {
+      const child = section.children.find(c => pathname.startsWith(c.href) && c.href !== "/")
+      if (child) return child.href
+    }
+    return null
   }
 
   // Close menus when clicking outside
@@ -439,8 +468,7 @@ export function Sidebar() {
           <DirectMenuItemComponent
             key={item.id}
             item={item}
-            activeItem={activeItem}
-            setActiveItem={setActiveItem}
+            isActive={isDashboardActive}
             isCollapsed={isCollapsed}
           />
         ))}
@@ -452,8 +480,7 @@ export function Sidebar() {
             item={item}
             isExpanded={expandedSections.includes(item.id)}
             onToggle={() => toggleSection(item.id)}
-            activeItem={activeItem}
-            setActiveItem={setActiveItem}
+            activeChild={getActiveChild()}
             isCollapsed={isCollapsed}
           />
         ))}
