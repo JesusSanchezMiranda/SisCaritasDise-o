@@ -279,18 +279,22 @@ export function Sidebar() {
         <aside className="w-56 bg-white border-r border-gray-200 flex flex-col shrink-0 shadow-sm">
           {/* Cabecera del Modulo */}
           <div 
-            className="px-3 py-3 flex items-center gap-2"
+            className="px-3 py-3 flex items-center justify-between gap-2"
             style={{ backgroundColor: PRIMARY_RED }}
           >
-            <span className="text-white">
-              {currentModule.icon}
-            </span>
-            <span className="bg-white/20 text-white font-medium text-sm px-3 py-1.5 rounded-lg flex-1">
-              {currentModule.label}
-            </span>
+            {/* Icono + Nombre del modulo en pill */}
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <span className="text-white shrink-0">
+                {currentModule.icon}
+              </span>
+              <span className="bg-[#9B2C2C] text-white font-medium text-sm px-4 py-1.5 rounded-full truncate">
+                {currentModule.label}
+              </span>
+            </div>
+            {/* Boton cerrar */}
             <button 
               onClick={() => setActiveModule("dashboard")}
-              className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white hover:bg-white/15 rounded-lg transition-all duration-200"
+              className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white hover:bg-white/15 rounded-full transition-all duration-200 shrink-0"
               title="Cerrar panel"
             >
               <X size={18} />
