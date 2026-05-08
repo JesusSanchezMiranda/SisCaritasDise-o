@@ -1,10 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import { PageLayout } from "@/components/page-layout"
 import { DataTable, Column } from "@/components/data-table"
 import { CreateButton, SaveButton, CancelButton } from "@/components/crud-buttons"
 import { Modal } from "@/components/modal"
-import { Package, AlertTriangle, Download, Upload } from "lucide-react"
+import { Warehouse, AlertTriangle, Download, Upload } from "lucide-react"
 
 interface Inventario {
   id: string
@@ -56,7 +57,7 @@ const mockInventario: Inventario[] = [
   {
     id: "3",
     productCode: "PROD-003",
-    productName: "Mascarillas Quirúrgicas",
+    productName: "Mascarillas Quirurgicas",
     productCategory: "HIGIENE",
     quantity: 0,
     unit: "CAJA",
@@ -77,9 +78,9 @@ export default function InventarioPage() {
   const [formData, setFormData] = useState<Partial<Inventario>>({})
 
   const columns: Column<Inventario>[] = [
-    { key: "productCode", label: "Código", sortable: true, width: "120px" },
+    { key: "productCode", label: "Codigo", sortable: true, width: "120px" },
     { key: "productName", label: "Producto", sortable: true },
-    { key: "productCategory", label: "Categoría", sortable: true },
+    { key: "productCategory", label: "Categoria", sortable: true },
     {
       key: "quantity",
       label: "Cantidad",
@@ -136,7 +137,7 @@ export default function InventarioPage() {
   }
 
   const handleDelete = (id: string) => {
-    if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+    if (confirm("Estas seguro de que deseas eliminar este producto?")) {
       setInventario(inventario.filter((i) => i.id !== id))
     }
   }
@@ -174,91 +175,93 @@ export default function InventarioPage() {
   const totalValue = inventario.reduce((sum, i) => sum + i.totalValue, 0)
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+    <PageLayout
+      title="Inventario"
+      subtitle="Gestiona productos y stock del almacen"
+      breadcrumbs={[{ label: "Farmacia" }, { label: "Inventario" }]}
+    >
+      {/* Header Actions */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-red-50 rounded-xl">
+            <Warehouse size={24} className="text-[#DC2626]" />
+          </div>
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-3 bg-emerald-100 rounded-xl">
-                <Package size={24} className="text-emerald-600" />
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900">Inventario</h1>
-            </div>
-            <p className="text-gray-600">Gestiona productos y stock del almacén</p>
-          </div>
-          <div className="flex gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-              <Download size={18} />
-              Exportar
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-              <Upload size={18} />
-              Importar
-            </button>
-            <CreateButton onClick={handleCreate} />
+            <h2 className="text-lg font-semibold text-gray-900">Lista de Inventario</h2>
+            <p className="text-sm text-gray-500">{inventario.length} productos en stock</p>
           </div>
         </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Total Productos</p>
-            <p className="text-2xl font-bold text-gray-900">{inventario.length}</p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Disponibles</p>
-            <p className="text-2xl font-bold text-green-600">
-              {inventario.filter((i) => i.status === "AVAILABLE").length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200 relative">
-            <p className="text-sm text-gray-600 mb-1">Bajo Stock</p>
-            <p className="text-2xl font-bold text-yellow-600">{lowStockItems}</p>
-            {lowStockItems > 0 && (
-              <AlertTriangle size={16} className="absolute top-4 right-4 text-yellow-600" />
-            )}
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200 relative">
-            <p className="text-sm text-gray-600 mb-1">Agotados</p>
-            <p className="text-2xl font-bold text-red-600">{outOfStockItems}</p>
-            {outOfStockItems > 0 && (
-              <AlertTriangle size={16} className="absolute top-4 right-4 text-red-600" />
-            )}
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Valor Total</p>
-            <p className="text-lg font-bold text-gray-900">S/. {totalValue.toLocaleString("es-PE")}</p>
-          </div>
+        <div className="flex gap-3">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
+            <Download size={18} />
+            Exportar
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
+            <Upload size={18} />
+            Importar
+          </button>
+          <CreateButton onClick={handleCreate} />
         </div>
-
-        {/* Data Table */}
-        <DataTable<Inventario>
-          columns={columns}
-          data={inventario}
-          title="Lista de Inventario"
-          searchPlaceholder="Buscar por código, producto o categoría..."
-          searchFields={["productCode", "productName", "productCategory"]}
-          emptyMessage="No hay productos en el inventario"
-          actions={(item) => [
-            {
-              type: "view",
-              onClick: () => handleEdit(item.id),
-              tooltip: "Ver detalles",
-            },
-            {
-              type: "edit",
-              onClick: () => handleEdit(item.id),
-              tooltip: "Editar",
-            },
-            {
-              type: "delete",
-              onClick: () => handleDelete(item.id),
-              tooltip: "Eliminar",
-            },
-          ]}
-        />
       </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Total Productos</p>
+          <p className="text-2xl font-bold text-gray-900">{inventario.length}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Disponibles</p>
+          <p className="text-2xl font-bold text-green-600">
+            {inventario.filter((i) => i.status === "AVAILABLE").length}
+          </p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200 relative">
+          <p className="text-sm text-gray-600 mb-1">Bajo Stock</p>
+          <p className="text-2xl font-bold text-yellow-600">{lowStockItems}</p>
+          {lowStockItems > 0 && (
+            <AlertTriangle size={16} className="absolute top-4 right-4 text-yellow-600" />
+          )}
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200 relative">
+          <p className="text-sm text-gray-600 mb-1">Agotados</p>
+          <p className="text-2xl font-bold text-[#DC2626]">{outOfStockItems}</p>
+          {outOfStockItems > 0 && (
+            <AlertTriangle size={16} className="absolute top-4 right-4 text-[#DC2626]" />
+          )}
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Valor Total</p>
+          <p className="text-lg font-bold text-gray-900">S/. {totalValue.toLocaleString("es-PE")}</p>
+        </div>
+      </div>
+
+      {/* Data Table */}
+      <DataTable<Inventario>
+        columns={columns}
+        data={inventario}
+        title="Lista de Inventario"
+        searchPlaceholder="Buscar por codigo, producto o categoria..."
+        searchFields={["productCode", "productName", "productCategory"]}
+        emptyMessage="No hay productos en el inventario"
+        actions={(item) => [
+          {
+            type: "view",
+            onClick: () => handleEdit(item.id),
+            tooltip: "Ver detalles",
+          },
+          {
+            type: "edit",
+            onClick: () => handleEdit(item.id),
+            tooltip: "Editar",
+          },
+          {
+            type: "delete",
+            onClick: () => handleDelete(item.id),
+            tooltip: "Eliminar",
+          },
+        ]}
+      />
 
       {/* Modal */}
       <Modal
@@ -277,28 +280,28 @@ export default function InventarioPage() {
           <div className="grid grid-cols-2 gap-4">
             <input
               type="text"
-              placeholder="Código de Producto"
+              placeholder="Codigo de Producto"
               value={formData.productCode || ""}
               onChange={(e) => setFormData({ ...formData, productCode: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="text"
               placeholder="Nombre de Producto"
               value={formData.productName || ""}
               onChange={(e) => setFormData({ ...formData, productName: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <select
               value={formData.productCategory || ""}
               onChange={(e) => setFormData({ ...formData, productCategory: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             >
-              <option value="">Seleccionar categoría</option>
+              <option value="">Seleccionar categoria</option>
               <option value="ALIMENTOS">Alimentos</option>
               <option value="ROPA_ABRIGO">Ropa y Abrigo</option>
               <option value="HIGIENE">Higiene</option>
-              <option value="UTILES_ESCOLARES">Útiles Escolares</option>
+              <option value="UTILES_ESCOLARES">Utiles Escolares</option>
               <option value="MEDICAMENTOS">Medicamentos</option>
               <option value="OTROS">Otros</option>
             </select>
@@ -307,12 +310,12 @@ export default function InventarioPage() {
               placeholder="Cantidad"
               value={formData.quantity || ""}
               onChange={(e) => setFormData({ ...formData, quantity: parseFloat(e.target.value) })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <select
               value={formData.unit || ""}
               onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             >
               <option value="">Unidad</option>
               <option value="KG">Kilogramos</option>
@@ -324,42 +327,42 @@ export default function InventarioPage() {
             </select>
             <input
               type="number"
-              placeholder="Stock Mínimo"
+              placeholder="Stock Minimo"
               value={formData.minStock || ""}
               onChange={(e) => setFormData({ ...formData, minStock: parseFloat(e.target.value) })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="number"
-              placeholder="Stock Máximo"
+              placeholder="Stock Maximo"
               value={formData.maxStock || ""}
               onChange={(e) => setFormData({ ...formData, maxStock: parseFloat(e.target.value) })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="number"
               placeholder="Costo Promedio"
               value={formData.averageCost || ""}
               onChange={(e) => setFormData({ ...formData, averageCost: parseFloat(e.target.value) })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="date"
               placeholder="Fecha de Vencimiento"
               value={formData.expirationDate || ""}
               onChange={(e) => setFormData({ ...formData, expirationDate: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="text"
-              placeholder="Número de Lote"
+              placeholder="Numero de Lote"
               value={formData.batchNumber || ""}
               onChange={(e) => setFormData({ ...formData, batchNumber: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
           </div>
         </div>
       </Modal>
-    </div>
+    </PageLayout>
   )
 }

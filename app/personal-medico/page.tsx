@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { AppLayout } from "../app-layout"
+import { PageLayout } from "@/components/page-layout"
 import { DataTable, Column } from "@/components/data-table"
 import { CreateButton, SaveButton, CancelButton } from "@/components/crud-buttons"
 import { Modal } from "@/components/modal"
@@ -20,9 +20,9 @@ interface PersonalMedico {
 }
 
 const mockPersonalMedico: PersonalMedico[] = [
-  { id: "1", firstName: "Dr. Juan", lastName: "Rodríguez", specialty: "Medicina General", license: "MED001", phone: "987654321", email: "juan@medical.com", experience: 10, status: "ACTIVE" },
-  { id: "2", firstName: "Dra. María", lastName: "López", specialty: "Oftalmología", license: "MED002", phone: "987654322", email: "maria@medical.com", experience: 8, status: "ACTIVE" },
-  { id: "3", firstName: "Dr. Carlos", lastName: "Martínez", specialty: "Odontología", license: "MED003", phone: "987654323", email: "carlos@medical.com", experience: 12, status: "ACTIVE" },
+  { id: "1", firstName: "Dr. Juan", lastName: "Rodriguez", specialty: "Medicina General", license: "MED001", phone: "987654321", email: "juan@medical.com", experience: 10, status: "ACTIVE" },
+  { id: "2", firstName: "Dra. Maria", lastName: "Lopez", specialty: "Oftalmologia", license: "MED002", phone: "987654322", email: "maria@medical.com", experience: 8, status: "ACTIVE" },
+  { id: "3", firstName: "Dr. Carlos", lastName: "Martinez", specialty: "Odontologia", license: "MED003", phone: "987654323", email: "carlos@medical.com", experience: 12, status: "ACTIVE" },
 ]
 
 export default function PersonalMedicoPage() {
@@ -36,9 +36,9 @@ export default function PersonalMedicoPage() {
     { key: "lastName", label: "Apellido", width: "15%" },
     { key: "specialty", label: "Especialidad", width: "20%" },
     { key: "license", label: "Licencia", width: "12%" },
-    { key: "experience", label: "Experiencia", width: "10%", render: (value) => `${value} años` },
-    { key: "phone", label: "Teléfono", width: "12%" },
-    { key: "status", label: "Estado", width: "16%", render: (value) => <span className={`px-2 py-1 rounded text-sm ${value === "ACTIVE" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{value}</span> },
+    { key: "experience", label: "Experiencia", width: "10%", render: (value) => `${value} anos` },
+    { key: "phone", label: "Telefono", width: "12%" },
+    { key: "status", label: "Estado", width: "16%", render: (value) => <span className={`px-2 py-1 rounded text-sm ${value === "ACTIVE" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{value === "ACTIVE" ? "Activo" : "Inactivo"}</span> },
   ]
 
   const handleCreate = () => {
@@ -72,83 +72,87 @@ export default function PersonalMedicoPage() {
   const activos = personal.filter((p) => p.status === "ACTIVE").length
   const experienciaPromedio = (personal.reduce((sum, p) => sum + p.experience, 0) / personal.length).toFixed(1)
 
-  const content = (
-    <div className="flex flex-col h-full">
-      <header className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-200 shrink-0">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-3 bg-emerald-100 rounded-xl">
-              <Stethoscope size={24} className="text-emerald-600" />
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900">Personal Médico</h1>
+  return (
+    <PageLayout
+      title="Personal Medico"
+      subtitle="Gestiona medicos y especialistas"
+      breadcrumbs={[{ label: "Personas" }, { label: "Personal Medico" }]}
+    >
+      {/* Header Actions */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-red-50 rounded-xl">
+            <Stethoscope size={24} className="text-[#DC2626]" />
           </div>
-          <p className="text-sm text-gray-600">Gestiona médicos y especialistas</p>
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">Equipo Medico</h2>
+            <p className="text-sm text-gray-500">{personal.length} profesionales registrados</p>
+          </div>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
             <Download size={18} />
             Exportar
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
             <Upload size={18} />
             Importar
           </button>
           <CreateButton onClick={handleCreate} />
         </div>
-      </header>
+      </div>
 
-      <div className="flex-1 p-8 overflow-y-auto">
-        <div className="max-w-7xl mx-auto space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Total Personal</p>
-              <p className="text-2xl font-bold text-gray-900">{personal.length}</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Activos</p>
-              <p className="text-2xl font-bold text-green-600">{activos}</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Experiencia Promedio</p>
-              <p className="text-2xl font-bold text-blue-600">{experienciaPromedio} años</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Especialidades</p>
-              <p className="text-2xl font-bold text-purple-600">{new Set(personal.map((p) => p.specialty)).size}</p>
-            </div>
-          </div>
-
-          <DataTable<PersonalMedico>
-            columns={columns}
-            data={personal}
-            title="Equipo Médico"
-            searchPlaceholder="Buscar por nombre, especialidad o licencia..."
-            searchFields={["firstName", "lastName", "specialty", "license"]}
-            actions={(item) => [
-              { type: "edit", onClick: () => handleEdit(item.id), tooltip: "Editar" },
-              { type: "delete", onClick: () => handleDelete(item.id), tooltip: "Eliminar" },
-            ]}
-          />
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Total Personal</p>
+          <p className="text-2xl font-bold text-gray-900">{personal.length}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Activos</p>
+          <p className="text-2xl font-bold text-green-600">{activos}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Experiencia Promedio</p>
+          <p className="text-2xl font-bold text-blue-600">{experienciaPromedio} anos</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Especialidades</p>
+          <p className="text-2xl font-bold text-[#DC2626]">{new Set(personal.map((p) => p.specialty)).size}</p>
         </div>
       </div>
 
+      {/* Data Table */}
+      <DataTable<PersonalMedico>
+        columns={columns}
+        data={personal}
+        title="Equipo Medico"
+        searchPlaceholder="Buscar por nombre, especialidad o licencia..."
+        searchFields={["firstName", "lastName", "specialty", "license"]}
+        actions={(item) => [
+          { type: "edit", onClick: () => handleEdit(item.id), tooltip: "Editar" },
+          { type: "delete", onClick: () => handleDelete(item.id), tooltip: "Eliminar" },
+        ]}
+      />
+
+      {/* Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={editingId ? "Editar Personal Médico" : "Crear Nuevo Personal Médico"}
+        title={editingId ? "Editar Personal Medico" : "Crear Nuevo Personal Medico"}
         size="lg"
         footer={<><CancelButton onClick={() => setIsModalOpen(false)} /><SaveButton onClick={handleSave} /></>}
       >
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <input type="text" placeholder="Nombre" value={formData.firstName || ""} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <input type="text" placeholder="Apellido" value={formData.lastName || ""} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <input type="text" placeholder="Especialidad" value={formData.specialty || ""} onChange={(e) => setFormData({ ...formData, specialty: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <input type="text" placeholder="Número de Licencia" value={formData.license || ""} onChange={(e) => setFormData({ ...formData, license: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <input type="tel" placeholder="Teléfono" value={formData.phone || ""} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <input type="email" placeholder="Email" value={formData.email || ""} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <input type="number" placeholder="Años de experiencia" value={formData.experience || ""} onChange={(e) => setFormData({ ...formData, experience: Number(e.target.value) })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <select value={formData.status || ""} onChange={(e) => setFormData({ ...formData, status: e.target.value as any })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500">
+            <input type="text" placeholder="Nombre" value={formData.firstName || ""} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <input type="text" placeholder="Apellido" value={formData.lastName || ""} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <input type="text" placeholder="Especialidad" value={formData.specialty || ""} onChange={(e) => setFormData({ ...formData, specialty: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <input type="text" placeholder="Numero de Licencia" value={formData.license || ""} onChange={(e) => setFormData({ ...formData, license: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <input type="tel" placeholder="Telefono" value={formData.phone || ""} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <input type="email" placeholder="Email" value={formData.email || ""} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <input type="number" placeholder="Anos de experiencia" value={formData.experience || ""} onChange={(e) => setFormData({ ...formData, experience: Number(e.target.value) })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <select value={formData.status || ""} onChange={(e) => setFormData({ ...formData, status: e.target.value as PersonalMedico["status"] })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]">
               <option value="">Estado</option>
               <option value="ACTIVE">Activo</option>
               <option value="INACTIVE">Inactivo</option>
@@ -156,8 +160,6 @@ export default function PersonalMedicoPage() {
           </div>
         </div>
       </Modal>
-    </div>
+    </PageLayout>
   )
-
-  return <AppLayout>{content}</AppLayout>
 }

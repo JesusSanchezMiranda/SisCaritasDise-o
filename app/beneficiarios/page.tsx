@@ -1,10 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import { PageLayout } from "@/components/page-layout"
 import { DataTable, Column } from "@/components/data-table"
 import { CreateButton, SaveButton, CancelButton } from "@/components/crud-buttons"
 import { Modal } from "@/components/modal"
-import { Heart, Download, Upload, Plus } from "lucide-react"
+import { Heart, Download, Upload } from "lucide-react"
 
 interface Beneficiario {
   id: string
@@ -26,8 +27,8 @@ const mockBeneficiarios: Beneficiario[] = [
   {
     id: "1",
     dni: "12345678",
-    firstName: "María",
-    lastName: "González",
+    firstName: "Maria",
+    lastName: "Gonzalez",
     birthDate: "1985-03-15",
     gender: "FEMENINO",
     phone: "987654321",
@@ -42,7 +43,7 @@ const mockBeneficiarios: Beneficiario[] = [
     id: "2",
     dni: "87654321",
     firstName: "Juan",
-    lastName: "Pérez",
+    lastName: "Perez",
     birthDate: "1990-07-22",
     gender: "MASCULINO",
     phone: "987654322",
@@ -65,7 +66,7 @@ export default function BeneficiariosPage() {
     { key: "dni", label: "DNI", sortable: true, width: "100px" },
     { key: "firstName", label: "Nombre", sortable: true },
     { key: "lastName", label: "Apellido", sortable: true },
-    { key: "phone", label: "Teléfono" },
+    { key: "phone", label: "Telefono" },
     {
       key: "vulnerabilityLevel",
       label: "Vulnerabilidad",
@@ -114,7 +115,7 @@ export default function BeneficiariosPage() {
   }
 
   const handleDelete = (id: string) => {
-    if (confirm("¿Estás seguro de que deseas eliminar este beneficiario?")) {
+    if (confirm("Estas seguro de que deseas eliminar este beneficiario?")) {
       setBeneficiarios(beneficiarios.filter((b) => b.id !== id))
     }
   }
@@ -148,85 +149,87 @@ export default function BeneficiariosPage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+    <PageLayout
+      title="Beneficiarios"
+      subtitle="Gestiona la informacion de los beneficiarios de Caritas"
+      breadcrumbs={[{ label: "Personas" }, { label: "Beneficiarios" }]}
+    >
+      {/* Header Actions */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-red-50 rounded-xl">
+            <Heart size={24} className="text-[#DC2626]" />
+          </div>
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-3 bg-pink-100 rounded-xl">
-                <Heart size={24} className="text-pink-600" />
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900">Beneficiarios</h1>
-            </div>
-            <p className="text-gray-600">Gestiona la información de los beneficiarios de Cáritas</p>
-          </div>
-          <div className="flex gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-              <Download size={18} />
-              Exportar
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-              <Upload size={18} />
-              Importar
-            </button>
-            <CreateButton onClick={handleCreate} />
+            <h2 className="text-lg font-semibold text-gray-900">Lista de Beneficiarios</h2>
+            <p className="text-sm text-gray-500">{beneficiarios.length} beneficiarios registrados</p>
           </div>
         </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Total de Beneficiarios</p>
-            <p className="text-2xl font-bold text-gray-900">{beneficiarios.length}</p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Nivel Crítico</p>
-            <p className="text-2xl font-bold text-red-600">
-              {beneficiarios.filter((b) => b.vulnerabilityLevel === "CRITICA").length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Activos</p>
-            <p className="text-2xl font-bold text-green-600">
-              {beneficiarios.filter((b) => b.status === "ACTIVE").length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Inactivos</p>
-            <p className="text-2xl font-bold text-gray-600">
-              {beneficiarios.filter((b) => b.status === "INACTIVE").length}
-            </p>
-          </div>
+        <div className="flex gap-3">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
+            <Download size={18} />
+            Exportar
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
+            <Upload size={18} />
+            Importar
+          </button>
+          <CreateButton onClick={handleCreate} />
         </div>
-
-        {/* Data Table */}
-        <DataTable<Beneficiario>
-          columns={columns}
-          data={beneficiarios}
-          title="Lista de Beneficiarios"
-          searchPlaceholder="Buscar por nombre, DNI o teléfono..."
-          searchFields={["firstName", "lastName", "dni", "phone"]}
-          emptyMessage="No hay beneficiarios registrados"
-          actions={(item) => [
-            {
-              type: "view",
-              onClick: () => handleEdit(item.id),
-              tooltip: "Ver detalles",
-            },
-            {
-              type: "edit",
-              onClick: () => handleEdit(item.id),
-              tooltip: "Editar",
-            },
-            {
-              type: "delete",
-              onClick: () => handleDelete(item.id),
-              tooltip: "Eliminar",
-            },
-          ]}
-        />
       </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Total de Beneficiarios</p>
+          <p className="text-2xl font-bold text-gray-900">{beneficiarios.length}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Nivel Critico</p>
+          <p className="text-2xl font-bold text-[#DC2626]">
+            {beneficiarios.filter((b) => b.vulnerabilityLevel === "CRITICA").length}
+          </p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Activos</p>
+          <p className="text-2xl font-bold text-green-600">
+            {beneficiarios.filter((b) => b.status === "ACTIVE").length}
+          </p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Inactivos</p>
+          <p className="text-2xl font-bold text-gray-600">
+            {beneficiarios.filter((b) => b.status === "INACTIVE").length}
+          </p>
+        </div>
+      </div>
+
+      {/* Data Table */}
+      <DataTable<Beneficiario>
+        columns={columns}
+        data={beneficiarios}
+        title="Lista de Beneficiarios"
+        searchPlaceholder="Buscar por nombre, DNI o telefono..."
+        searchFields={["firstName", "lastName", "dni", "phone"]}
+        emptyMessage="No hay beneficiarios registrados"
+        actions={(item) => [
+          {
+            type: "view",
+            onClick: () => handleEdit(item.id),
+            tooltip: "Ver detalles",
+          },
+          {
+            type: "edit",
+            onClick: () => handleEdit(item.id),
+            tooltip: "Editar",
+          },
+          {
+            type: "delete",
+            onClick: () => handleDelete(item.id),
+            tooltip: "Eliminar",
+          },
+        ]}
+      />
 
       {/* Modal */}
       <Modal
@@ -248,50 +251,50 @@ export default function BeneficiariosPage() {
               placeholder="DNI"
               value={formData.dni || ""}
               onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="text"
               placeholder="Nombre"
               value={formData.firstName || ""}
               onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="text"
               placeholder="Apellido"
               value={formData.lastName || ""}
               onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="tel"
-              placeholder="Teléfono"
+              placeholder="Telefono"
               value={formData.phone || ""}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <input
               type="email"
               placeholder="Email"
               value={formData.email || ""}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             />
             <select
               value={formData.vulnerabilityLevel || ""}
-              onChange={(e) => setFormData({ ...formData, vulnerabilityLevel: e.target.value as any })}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500"
+              onChange={(e) => setFormData({ ...formData, vulnerabilityLevel: e.target.value as Beneficiario["vulnerabilityLevel"] })}
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]"
             >
               <option value="">Seleccionar nivel de vulnerabilidad</option>
               <option value="BAJA">Baja</option>
               <option value="MEDIA">Media</option>
               <option value="ALTA">Alta</option>
-              <option value="CRITICA">Crítica</option>
+              <option value="CRITICA">Critica</option>
             </select>
           </div>
         </div>
       </Modal>
-    </div>
+    </PageLayout>
   )
 }

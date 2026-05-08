@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { AppLayout } from "../app-layout"
+import { PageLayout } from "@/components/page-layout"
 import { DataTable, Column } from "@/components/data-table"
 import { CreateButton, SaveButton, CancelButton } from "@/components/crud-buttons"
 import { Modal } from "@/components/modal"
@@ -19,9 +19,9 @@ interface Proyecto {
 }
 
 const mockProyectos: Proyecto[] = [
-  { id: "1", projectName: "Escuela Rural", description: "Construcción escuela en zona rural", startDate: "2024-01-01", endDate: "2024-12-31", budget: 150000, spent: 89000, status: "IN_PROGRESS" },
-  { id: "2", projectName: "Clínica Móvil", description: "Atención médica itinerante", startDate: "2024-02-01", endDate: "2024-06-30", budget: 80000, spent: 45000, status: "IN_PROGRESS" },
-  { id: "3", projectName: "Comedor Comunitario", description: "Alimentación para comunidades vulnerables", startDate: "2024-03-01", endDate: "2024-12-31", budget: 120000, spent: 0, status: "PLANNING" },
+  { id: "1", projectName: "Escuela Rural", description: "Construccion escuela en zona rural", startDate: "2024-01-01", endDate: "2024-12-31", budget: 150000, spent: 89000, status: "IN_PROGRESS" },
+  { id: "2", projectName: "Clinica Movil", description: "Atencion medica itinerante", startDate: "2024-02-01", endDate: "2024-06-30", budget: 80000, spent: 45000, status: "IN_PROGRESS" },
+  { id: "3", projectName: "Comedor Comunitario", description: "Alimentacion para comunidades vulnerables", startDate: "2024-03-01", endDate: "2024-12-31", budget: 120000, spent: 0, status: "PLANNING" },
 ]
 
 export default function ProyectosPage() {
@@ -40,7 +40,7 @@ export default function ProyectosPage() {
 
   const columns: Column<Proyecto>[] = [
     { key: "projectName", label: "Proyecto", width: "25%" },
-    { key: "description", label: "Descripción", width: "25%" },
+    { key: "description", label: "Descripcion", width: "25%" },
     { key: "startDate", label: "Inicio", width: "12%" },
     { key: "budget", label: "Presupuesto", width: "12%", render: (value) => `S/. ${value.toLocaleString()}` },
     { key: "spent", label: "Gastado", width: "12%", render: (value) => `S/. ${value.toLocaleString()}` },
@@ -79,66 +79,70 @@ export default function ProyectosPage() {
   const totalSpent = proyectos.reduce((sum, p) => sum + p.spent, 0)
   const inProgress = proyectos.filter((p) => p.status === "IN_PROGRESS").length
 
-  const content = (
-    <div className="flex flex-col h-full">
-      <header className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-200 shrink-0">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-3 bg-teal-100 rounded-xl">
-              <FolderOpen size={24} className="text-teal-600" />
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900">Proyectos</h1>
+  return (
+    <PageLayout
+      title="Proyectos"
+      subtitle="Gestiona proyectos sociales y de desarrollo"
+      breadcrumbs={[{ label: "Social" }, { label: "Proyectos" }]}
+    >
+      {/* Header Actions */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-red-50 rounded-xl">
+            <FolderOpen size={24} className="text-[#DC2626]" />
           </div>
-          <p className="text-sm text-gray-600">Gestiona proyectos sociales y de desarrollo</p>
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">Lista de Proyectos</h2>
+            <p className="text-sm text-gray-500">{proyectos.length} proyectos registrados</p>
+          </div>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
             <Download size={18} />
             Exportar
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
             <Upload size={18} />
             Importar
           </button>
           <CreateButton onClick={handleCreate} />
         </div>
-      </header>
+      </div>
 
-      <div className="flex-1 p-8 overflow-y-auto">
-        <div className="max-w-7xl mx-auto space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Total Proyectos</p>
-              <p className="text-2xl font-bold text-gray-900">{proyectos.length}</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">En Progreso</p>
-              <p className="text-2xl font-bold text-yellow-600">{inProgress}</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Presupuesto Total</p>
-              <p className="text-2xl font-bold text-blue-600">S/. {totalBudget.toLocaleString()}</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Gastado</p>
-              <p className="text-2xl font-bold text-orange-600">S/. {totalSpent.toLocaleString()}</p>
-            </div>
-          </div>
-
-          <DataTable<Proyecto>
-            columns={columns}
-            data={proyectos}
-            title="Lista de Proyectos"
-            searchPlaceholder="Buscar por nombre o descripción..."
-            searchFields={["projectName", "description"]}
-            actions={(item) => [
-              { type: "edit", onClick: () => handleEdit(item.id), tooltip: "Editar" },
-              { type: "delete", onClick: () => handleDelete(item.id), tooltip: "Eliminar" },
-            ]}
-          />
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Total Proyectos</p>
+          <p className="text-2xl font-bold text-gray-900">{proyectos.length}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">En Progreso</p>
+          <p className="text-2xl font-bold text-yellow-600">{inProgress}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Presupuesto Total</p>
+          <p className="text-2xl font-bold text-blue-600">S/. {totalBudget.toLocaleString()}</p>
+        </div>
+        <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <p className="text-sm text-gray-600 mb-1">Gastado</p>
+          <p className="text-2xl font-bold text-[#DC2626]">S/. {totalSpent.toLocaleString()}</p>
         </div>
       </div>
 
+      {/* Data Table */}
+      <DataTable<Proyecto>
+        columns={columns}
+        data={proyectos}
+        title="Lista de Proyectos"
+        searchPlaceholder="Buscar por nombre o descripcion..."
+        searchFields={["projectName", "description"]}
+        actions={(item) => [
+          { type: "edit", onClick: () => handleEdit(item.id), tooltip: "Editar" },
+          { type: "delete", onClick: () => handleDelete(item.id), tooltip: "Eliminar" },
+        ]}
+      />
+
+      {/* Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -148,14 +152,14 @@ export default function ProyectosPage() {
       >
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <input type="text" placeholder="Nombre" value={formData.projectName || ""} onChange={(e) => setFormData({ ...formData, projectName: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 col-span-2" />
-            <input type="text" placeholder="Descripción" value={formData.description || ""} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 col-span-2" />
-            <input type="date" placeholder="Inicio" value={formData.startDate || ""} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <input type="date" placeholder="Fin" value={formData.endDate || ""} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <input type="number" placeholder="Presupuesto" value={formData.budget || ""} onChange={(e) => setFormData({ ...formData, budget: Number(e.target.value) })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500" />
-            <select value={formData.status || ""} onChange={(e) => setFormData({ ...formData, status: e.target.value as any })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500">
+            <input type="text" placeholder="Nombre" value={formData.projectName || ""} onChange={(e) => setFormData({ ...formData, projectName: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626] col-span-2" />
+            <input type="text" placeholder="Descripcion" value={formData.description || ""} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626] col-span-2" />
+            <input type="date" placeholder="Inicio" value={formData.startDate || ""} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <input type="date" placeholder="Fin" value={formData.endDate || ""} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <input type="number" placeholder="Presupuesto" value={formData.budget || ""} onChange={(e) => setFormData({ ...formData, budget: Number(e.target.value) })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]" />
+            <select value={formData.status || ""} onChange={(e) => setFormData({ ...formData, status: e.target.value as Proyecto["status"] })} className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#DC2626]">
               <option value="">Seleccionar estado</option>
-              <option value="PLANNING">Planificación</option>
+              <option value="PLANNING">Planificacion</option>
               <option value="IN_PROGRESS">En Progreso</option>
               <option value="COMPLETED">Completado</option>
               <option value="SUSPENDED">Suspendido</option>
@@ -164,8 +168,6 @@ export default function ProyectosPage() {
           </div>
         </div>
       </Modal>
-    </div>
+    </PageLayout>
   )
-
-  return <AppLayout>{content}</AppLayout>
 }
