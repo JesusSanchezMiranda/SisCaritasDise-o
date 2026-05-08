@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import Image from "next/image"
 import {
   Users,
@@ -134,27 +135,29 @@ function Tooltip({ children, text, show }: { children: React.ReactNode; text: st
 
 function DirectMenuItemComponent({ 
   item, 
-  activeItem, 
-  setActiveItem,
+  isActive,
   isCollapsed,
 }: { 
   item: DirectMenuItem
-  activeItem: string | null
-  setActiveItem: (item: string | null) => void
+  isActive: boolean
   isCollapsed: boolean
 }) {
+  const router = useRouter()
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    router.push(item.href)
+  }
+
   if (isCollapsed) {
     return (
       <div className="mb-2 px-2">
         <Tooltip text={item.label} show={isCollapsed}>
           <a
             href={item.href}
-            onClick={(e) => {
-              e.preventDefault()
-              setActiveItem(item.label)
-            }}
+            onClick={handleClick}
             className={`w-full flex items-center justify-center p-3 rounded-xl transition-all duration-200 ${
-              activeItem === item.label
+              isActive
                 ? "bg-primary text-white shadow-lg shadow-primary/25"
                 : "text-gray-500 hover:bg-gray-100 hover:text-primary"
             }`}
@@ -170,18 +173,15 @@ function DirectMenuItemComponent({
     <div className="mb-2 px-2">
       <a
         href={item.href}
-        onClick={(e) => {
-          e.preventDefault()
-          setActiveItem(item.label)
-        }}
+        onClick={handleClick}
         className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
-          activeItem === item.label
+          isActive
             ? "bg-primary text-white shadow-lg shadow-primary/25"
             : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
         }`}
       >
         <span className={`transition-transform duration-200 group-hover:scale-110 ${
-          activeItem === item.label ? "text-white" : "text-gray-400 group-hover:text-primary"
+          isActive ? "text-white" : "text-gray-400 group-hover:text-primary"
         }`}>
           {item.icon}
         </span>
@@ -195,17 +195,22 @@ function MenuSection({
   item, 
   isExpanded, 
   onToggle, 
-  activeItem, 
-  setActiveItem,
+  activeChild,
   isCollapsed,
 }: { 
   item: MenuItem
   isExpanded: boolean
   onToggle: () => void
-  activeItem: string | null
-  setActiveItem: (item: string | null) => void
+  activeChild: string | null
   isCollapsed: boolean
 }) {
+  const router = useRouter()
+
+  const handleChildClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    router.push(href)
+  }
+
   // In collapsed mode, show only the section icon
   if (isCollapsed) {
     return (
@@ -252,25 +257,22 @@ function MenuSection({
             <a
               key={index}
               href={child.href}
-              onClick={(e) => {
-                e.preventDefault()
-                setActiveItem(child.label)
-              }}
+              onClick={(e) => handleChildClick(e, child.href)}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
-                activeItem === child.label
+                activeChild === child.href
                   ? "bg-primary text-white shadow-lg shadow-primary/25"
                   : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
               }`}
             >
               <span className={`transition-transform duration-200 group-hover:scale-110 ${
-                activeItem === child.label ? "text-white" : "text-gray-400 group-hover:text-primary"
+                activeChild === child.href ? "text-white" : "text-gray-400 group-hover:text-primary"
               }`}>
                 {child.icon}
               </span>
               <span className="flex-1">{child.label}</span>
               {child.badge && (
                 <span className={`px-2 py-0.5 text-xs font-bold rounded-full transition-colors ${
-                  activeItem === child.label 
+                  activeChild === child.href 
                     ? "bg-white/20 text-white" 
                     : "bg-primary/10 text-primary"
                 }`}>
@@ -286,13 +288,26 @@ function MenuSection({
 }
 
 export function Sidebar() {
+  const pathname = usePathname()
   const [isCollapsed, setIsCollapsed] = useState(false)
-  const [expandedSections, setExpandedSections] = useState<string[]>(["usuarios"])
-  const [activeItem, setActiveItem] = useState<string | null>("Dashboard")
+  const [expandedSections, setExpandedSections] = useState<string[]>(["gestion"])
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
   const notificationRef = useRef<HTMLDivElement>(null)
+
+  // Determinar qué sección debe estar expandida según la ruta actual
+  useEffect(() => {
+    const currentPath = pathname.split('/')[1] // Obtener la primera parte de la ruta
+    
+    // Encontrar qué sección contiene este path
+    menuItems.forEach(section => {
+      const hasChild = section.children.some(child => child.href.includes(currentPath))
+      if (hasChild && !expandedSections.includes(section.id)) {
+        setExpandedSections(prev => [...prev, section.id])
+      }
+    })
+  }, [pathname])
 
   const toggleSection = (id: string) => {
     setExpandedSections(prev => 
@@ -300,6 +315,18 @@ export function Sidebar() {
         ? prev.filter(s => s !== id) 
         : [...prev, id]
     )
+  }
+
+  // Determinar si el dashboard está activo
+  const isDashboardActive = pathname === "/" || pathname === "/dashboard"
+
+  // Determinar qué item está activo en las secciones
+  const getActiveChild = () => {
+    for (const section of menuItems) {
+      const child = section.children.find(c => pathname.startsWith(c.href) && c.href !== "/")
+      if (child) return child.href
+    }
+    return null
   }
 
   // Close menus when clicking outside
@@ -436,8 +463,7 @@ export function Sidebar() {
           <DirectMenuItemComponent
             key={item.id}
             item={item}
-            activeItem={activeItem}
-            setActiveItem={setActiveItem}
+            isActive={isDashboardActive}
             isCollapsed={isCollapsed}
           />
         ))}
@@ -449,8 +475,7 @@ export function Sidebar() {
             item={item}
             isExpanded={expandedSections.includes(item.id)}
             onToggle={() => toggleSection(item.id)}
-            activeItem={activeItem}
-            setActiveItem={setActiveItem}
+            activeChild={getActiveChild()}
             isCollapsed={isCollapsed}
           />
         ))}
