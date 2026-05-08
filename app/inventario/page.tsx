@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { AppLayout } from "../app-layout"
 import { DataTable, Column } from "@/components/data-table"
 import { CreateButton, SaveButton, CancelButton } from "@/components/crud-buttons"
 import { Modal } from "@/components/modal"
@@ -174,35 +173,32 @@ export default function InventarioPage() {
   const outOfStockItems = inventario.filter((i) => i.status === "OUT_OF_STOCK").length
   const totalValue = inventario.reduce((sum, i) => sum + i.totalValue, 0)
 
-  const content = (
-    <div className="flex flex-col h-full">
-      {/* Header */}
-      <header className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-200 shrink-0">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-3 bg-emerald-100 rounded-xl">
-              <Package size={24} className="text-emerald-600" />
+  return (
+    <div className="w-full min-h-screen bg-gray-50 p-8">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-3 bg-emerald-100 rounded-xl">
+                <Package size={24} className="text-emerald-600" />
+              </div>
+              <h1 className="text-3xl font-bold text-gray-900">Inventario</h1>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">Inventario</h1>
+            <p className="text-gray-600">Gestiona productos y stock del almacén</p>
           </div>
-          <p className="text-sm text-gray-600">Gestiona productos y stock del almacén</p>
+          <div className="flex gap-3">
+            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+              <Download size={18} />
+              Exportar
+            </button>
+            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+              <Upload size={18} />
+              Importar
+            </button>
+            <CreateButton onClick={handleCreate} />
+          </div>
         </div>
-        <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-            <Download size={18} />
-            Exportar
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-            <Upload size={18} />
-            Importar
-          </button>
-          <CreateButton onClick={handleCreate} />
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <div className="flex-1 p-8 overflow-y-auto">
-        <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -364,10 +360,6 @@ export default function InventarioPage() {
           </div>
         </div>
       </Modal>
-        </div>
-      </div>
     </div>
   )
-
-  return <AppLayout>{content}</AppLayout>
 }

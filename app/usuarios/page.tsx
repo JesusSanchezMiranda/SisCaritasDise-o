@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { AppLayout } from "../app-layout"
 import { DataTable, Column } from "@/components/data-table"
 import { CreateButton, SaveButton, CancelButton } from "@/components/crud-buttons"
 import { Modal } from "@/components/modal"
@@ -144,94 +143,91 @@ export default function UsuariosPage() {
     setIsModalOpen(false)
   }
 
-  const content = (
-    <div className="flex flex-col h-full">
-      {/* Header */}
-      <header className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-200 shrink-0">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-3 bg-blue-100 rounded-xl">
-              <Users size={24} className="text-blue-600" />
+  return (
+    <div className="w-full min-h-screen bg-gray-50 p-8">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-3 bg-blue-100 rounded-xl">
+                <Users size={24} className="text-blue-600" />
+              </div>
+              <h1 className="text-3xl font-bold text-gray-900">Usuarios</h1>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">Usuarios</h1>
+            <p className="text-gray-600">Gestiona usuarios y roles del sistema</p>
           </div>
-          <p className="text-sm text-gray-600">Gestiona usuarios y roles del sistema</p>
-        </div>
-        <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-            <Download size={18} />
-            Exportar
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
-            <Upload size={18} />
-            Importar
-          </button>
-          <CreateButton onClick={handleCreate} />
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <div className="flex-1 p-8 overflow-y-auto">
-        <div className="max-w-7xl mx-auto space-y-6">
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Total Usuarios</p>
-              <p className="text-2xl font-bold text-gray-900">{usuarios.length}</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Administradores</p>
-              <p className="text-2xl font-bold text-red-600">
-                {usuarios.filter((u) => u.role === "ADMIN").length}
-              </p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Coordinadores</p>
-              <p className="text-2xl font-bold text-blue-600">
-                {usuarios.filter((u) => u.role === "COORDINADOR").length}
-              </p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Contadores</p>
-              <p className="text-2xl font-bold text-purple-600">
-                {usuarios.filter((u) => u.role === "CONTADOR").length}
-              </p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-gray-200">
-              <p className="text-sm text-gray-600 mb-1">Activos</p>
-              <p className="text-2xl font-bold text-green-600">
-                {usuarios.filter((u) => u.status === "ACTIVE").length}
-              </p>
-            </div>
+          <div className="flex gap-3">
+            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+              <Download size={18} />
+              Exportar
+            </button>
+            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+              <Upload size={18} />
+              Importar
+            </button>
+            <CreateButton onClick={handleCreate} />
           </div>
-
-          {/* Data Table */}
-          <DataTable<Usuario>
-            columns={columns}
-            data={usuarios}
-            title="Lista de Usuarios"
-            searchPlaceholder="Buscar por usuario, nombre o email..."
-            searchFields={["username", "firstName", "lastName", "email"]}
-            emptyMessage="No hay usuarios registrados"
-            actions={(item) => [
-              {
-                type: "view",
-                onClick: () => handleEdit(item.id),
-                tooltip: "Ver detalles",
-              },
-              {
-                type: "edit",
-                onClick: () => handleEdit(item.id),
-                tooltip: "Editar",
-              },
-              {
-                type: "delete",
-                onClick: () => handleDelete(item.id),
-                tooltip: "Eliminar",
-              },
-            ]}
-          />
         </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="bg-white p-4 rounded-xl border border-gray-200">
+            <p className="text-sm text-gray-600 mb-1">Total Usuarios</p>
+            <p className="text-2xl font-bold text-gray-900">{usuarios.length}</p>
+          </div>
+          <div className="bg-white p-4 rounded-xl border border-gray-200">
+            <p className="text-sm text-gray-600 mb-1">Administradores</p>
+            <p className="text-2xl font-bold text-red-600">
+              {usuarios.filter((u) => u.role === "ADMIN").length}
+            </p>
+          </div>
+          <div className="bg-white p-4 rounded-xl border border-gray-200">
+            <p className="text-sm text-gray-600 mb-1">Coordinadores</p>
+            <p className="text-2xl font-bold text-blue-600">
+              {usuarios.filter((u) => u.role === "COORDINADOR").length}
+            </p>
+          </div>
+          <div className="bg-white p-4 rounded-xl border border-gray-200">
+            <p className="text-sm text-gray-600 mb-1">Contadores</p>
+            <p className="text-2xl font-bold text-purple-600">
+              {usuarios.filter((u) => u.role === "CONTADOR").length}
+            </p>
+          </div>
+          <div className="bg-white p-4 rounded-xl border border-gray-200">
+            <p className="text-sm text-gray-600 mb-1">Activos</p>
+            <p className="text-2xl font-bold text-green-600">
+              {usuarios.filter((u) => u.status === "ACTIVE").length}
+            </p>
+          </div>
+        </div>
+
+        {/* Data Table */}
+        <DataTable<Usuario>
+          columns={columns}
+          data={usuarios}
+          title="Lista de Usuarios"
+          searchPlaceholder="Buscar por usuario, nombre o email..."
+          searchFields={["username", "firstName", "lastName", "email"]}
+          emptyMessage="No hay usuarios registrados"
+          actions={(item) => [
+            {
+              type: "view",
+              onClick: () => handleEdit(item.id),
+              tooltip: "Ver detalles",
+            },
+            {
+              type: "edit",
+              onClick: () => handleEdit(item.id),
+              tooltip: "Editar",
+            },
+            {
+              type: "delete",
+              onClick: () => handleDelete(item.id),
+              tooltip: "Eliminar",
+            },
+          ]}
+        />
       </div>
 
       {/* Modal */}
@@ -300,6 +296,4 @@ export default function UsuariosPage() {
       </Modal>
     </div>
   )
-
-  return <AppLayout>{content}</AppLayout>
 }
