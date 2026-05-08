@@ -338,17 +338,13 @@ export function Sidebar() {
         <div className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
           {/* Logo + Name */}
           <div className={`flex items-center gap-3 ${isCollapsed ? "justify-center" : ""}`}>
-            <div className={`rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border border-primary/20 transition-all duration-300 ${
-              isCollapsed ? "w-12 h-12" : "w-11 h-11"
-            }`}>
-              <Image
-                src="/logo-caritas.png"
-                alt="Cáritas Logo"
-                width={isCollapsed ? 32 : 28}
-                height={isCollapsed ? 32 : 28}
-                className="object-contain"
-              />
-            </div>
+            <Image
+              src="/logo-caritas.png"
+              alt="Cáritas Logo"
+              width={isCollapsed ? 40 : 36}
+              height={isCollapsed ? 40 : 36}
+              className="object-contain"
+            />
             {!isCollapsed && (
               <div className="animate-fade-in">
                 <h2 className="text-sm font-bold text-gray-900">SisCaritas</h2>
