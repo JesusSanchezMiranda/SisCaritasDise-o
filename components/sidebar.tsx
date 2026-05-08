@@ -387,49 +387,28 @@ export function Sidebar() {
 
       {/* Profile Menu Dropdown */}
       {showProfileMenu && !isCollapsed && (
-        <div className="absolute bottom-20 left-4 w-52 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-in">
-          {/* Profile Header */}
-          <div className="px-3 py-2.5 border-b border-gray-100 bg-gray-50/50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-                  <User size={16} className="text-primary" />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm">Administrador</p>
-                  <p className="text-[11px] text-gray-500">admin@caritas.org</p>
-                </div>
-              </div>
-              <button 
-                onClick={() => setShowProfileMenu(false)}
-                className="p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-              >
-                <X size={14} />
-              </button>
-            </div>
-          </div>
-          
+        <div className="absolute bottom-20 left-4 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-in">
           {/* Menu Options */}
-          <div className="py-1">
-            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <User size={15} className="text-gray-400 group-hover:text-primary transition-colors" />
+          <div className="py-1.5">
+            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <User size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
               Mi perfil
             </button>
-            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <Settings size={15} className="text-gray-400 group-hover:text-primary transition-colors" />
+            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <Settings size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
               Configuración
             </button>
-            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <Bell size={15} className="text-gray-400 group-hover:text-primary transition-colors" />
+            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <Bell size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
               Notificaciones
             </button>
-            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <HelpCircle size={15} className="text-gray-400 group-hover:text-primary transition-colors" />
+            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <HelpCircle size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
               Ayuda
             </button>
-            <div className="my-1 border-t border-gray-100" />
-            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary hover:bg-primary/5 transition-colors font-medium">
-              <LogOut size={15} />
+            <div className="my-1.5 border-t border-gray-100" />
+            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-primary hover:bg-primary/5 transition-colors font-medium">
+              <LogOut size={16} />
               Cerrar sesión
             </button>
           </div>
