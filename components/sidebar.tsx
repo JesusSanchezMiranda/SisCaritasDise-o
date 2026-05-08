@@ -31,7 +31,6 @@ import {
   User,
   LogOut,
   Home,
-  Calendar,
   HelpCircle,
   Mail,
   ChevronLeft,
@@ -59,7 +58,6 @@ const menuItems: MenuItem[] = [
     icon: <Home size={20} />,
     children: [
       { label: "Dashboard", icon: <Home size={18} />, href: "/dashboard" },
-      { label: "Agenda", icon: <Calendar size={18} />, href: "/agenda" },
     ],
   },
   {
