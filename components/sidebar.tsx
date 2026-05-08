@@ -31,7 +31,6 @@ import {
   User,
   LogOut,
   Home,
-  Calendar,
   HelpCircle,
   Mail,
   ChevronLeft,
@@ -52,20 +51,24 @@ interface MenuItem {
   children: SubMenuItem[]
 }
 
+// Direct menu item for Dashboard (no section header needed)
+interface DirectMenuItem {
+  id: string
+  label: string
+  icon: React.ReactNode
+  href: string
+  isDirect: true
+}
+
+const directItems: DirectMenuItem[] = [
+  { id: "dashboard", label: "Dashboard", icon: <Home size={18} />, href: "/dashboard", isDirect: true },
+]
+
 const menuItems: MenuItem[] = [
-  {
-    id: "inicio",
-    label: "INICIO",
-    icon: <Home size={20} />,
-    children: [
-      { label: "Dashboard", icon: <Home size={18} />, href: "/dashboard" },
-      { label: "Agenda", icon: <Calendar size={18} />, href: "/agenda" },
-    ],
-  },
   {
     id: "usuarios",
     label: "USUARIOS",
-    icon: <Users size={20} />,
+    icon: <Users size={18} />,
     children: [
       { label: "Proveedores", icon: <Truck size={18} />, href: "/usuarios/proveedores" },
       { label: "Pacientes", icon: <UserCheck size={18} />, href: "/usuarios/pacientes", badge: "128" },
@@ -75,7 +78,7 @@ const menuItems: MenuItem[] = [
   {
     id: "reportes",
     label: "REPORTES",
-    icon: <FileText size={20} />,
+    icon: <FileText size={18} />,
     children: [
       { label: "Ventas Médicas", icon: <ShoppingCart size={18} />, href: "/reportes/ventas-medicas" },
       { label: "Compras Médicas", icon: <ShoppingBag size={18} />, href: "/reportes/compras-medicas" },
@@ -91,7 +94,7 @@ const menuItems: MenuItem[] = [
   {
     id: "productos",
     label: "PRODUCTOS",
-    icon: <Package size={20} />,
+    icon: <Package size={18} />,
     children: [
       { label: "Tratamientos", icon: <Pill size={18} />, href: "/productos/tratamientos" },
       { label: "Consultas", icon: <ClipboardList size={18} />, href: "/productos/consultas" },
@@ -103,7 +106,7 @@ const menuItems: MenuItem[] = [
   {
     id: "administracion",
     label: "ADMINISTRACIÓN",
-    icon: <Settings size={20} />,
+    icon: <Settings size={18} />,
     children: [
       { label: "Especialidades", icon: <Layers size={18} />, href: "/administracion/especialidades" },
       { label: "Tipo de Cliente", icon: <Tag size={18} />, href: "/administracion/tipo-cliente" },
@@ -128,6 +131,65 @@ function Tooltip({ children, text, show }: { children: React.ReactNode; text: st
         {text}
         <div className="absolute right-full top-1/2 -translate-y-1/2 border-8 border-transparent border-r-gray-900" />
       </div>
+    </div>
+  )
+}
+
+function DirectMenuItemComponent({ 
+  item, 
+  activeItem, 
+  setActiveItem,
+  isCollapsed,
+}: { 
+  item: DirectMenuItem
+  activeItem: string | null
+  setActiveItem: (item: string | null) => void
+  isCollapsed: boolean
+}) {
+  if (isCollapsed) {
+    return (
+      <div className="mb-2 px-2">
+        <Tooltip text={item.label} show={isCollapsed}>
+          <a
+            href={item.href}
+            onClick={(e) => {
+              e.preventDefault()
+              setActiveItem(item.label)
+            }}
+            className={`w-full flex items-center justify-center p-3 rounded-xl transition-all duration-200 ${
+              activeItem === item.label
+                ? "bg-primary text-white shadow-lg shadow-primary/25"
+                : "text-gray-500 hover:bg-gray-100 hover:text-primary"
+            }`}
+          >
+            {item.icon}
+          </a>
+        </Tooltip>
+      </div>
+    )
+  }
+
+  return (
+    <div className="mb-2 px-2">
+      <a
+        href={item.href}
+        onClick={(e) => {
+          e.preventDefault()
+          setActiveItem(item.label)
+        }}
+        className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
+          activeItem === item.label
+            ? "bg-primary text-white shadow-lg shadow-primary/25"
+            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+        }`}
+      >
+        <span className={`transition-transform duration-200 group-hover:scale-110 ${
+          activeItem === item.label ? "text-white" : "text-gray-400 group-hover:text-primary"
+        }`}>
+          {item.icon}
+        </span>
+        <span className="flex-1">{item.label}</span>
+      </a>
     </div>
   )
 }
@@ -164,17 +226,21 @@ function MenuSection({
   }
 
   return (
-    <div className="mb-2">
+    <div className="mb-1">
       {/* Section Header */}
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hover:text-gray-600 transition-colors group"
+        className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700 hover:bg-gray-50/50 rounded-lg mx-2 transition-all duration-200 group"
+        style={{ width: 'calc(100% - 16px)' }}
       >
-        <span>{item.label}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-gray-400 group-hover:text-primary transition-colors">{item.icon}</span>
+          <span>{item.label}</span>
+        </div>
         {isExpanded ? (
-          <ChevronDown size={16} className="text-gray-400 group-hover:text-gray-600 transition-transform duration-300" />
+          <ChevronDown size={14} className="text-gray-400 group-hover:text-gray-600 transition-transform duration-300" />
         ) : (
-          <ChevronRight size={16} className="text-gray-400 group-hover:text-gray-600 transition-transform duration-300" />
+          <ChevronRight size={14} className="text-gray-400 group-hover:text-gray-600 transition-transform duration-300" />
         )}
       </button>
       
@@ -224,7 +290,7 @@ function MenuSection({
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)
-  const [expandedSections, setExpandedSections] = useState<string[]>(["inicio", "usuarios"])
+  const [expandedSections, setExpandedSections] = useState<string[]>(["usuarios"])
   const [activeItem, setActiveItem] = useState<string | null>("Dashboard")
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
@@ -272,17 +338,13 @@ export function Sidebar() {
         <div className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
           {/* Logo + Name */}
           <div className={`flex items-center gap-3 ${isCollapsed ? "justify-center" : ""}`}>
-            <div className={`rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border border-primary/20 transition-all duration-300 ${
-              isCollapsed ? "w-12 h-12" : "w-11 h-11"
-            }`}>
-              <Image
-                src="/logo-caritas.png"
-                alt="Cáritas Logo"
-                width={isCollapsed ? 32 : 28}
-                height={isCollapsed ? 32 : 28}
-                className="object-contain"
-              />
-            </div>
+            <Image
+              src="/logo-caritas.png"
+              alt="Cáritas Logo"
+              width={isCollapsed ? 40 : 36}
+              height={isCollapsed ? 40 : 36}
+              className="object-contain"
+            />
             {!isCollapsed && (
               <div className="animate-fade-in">
                 <h2 className="text-sm font-bold text-gray-900">SisCaritas</h2>
@@ -372,6 +434,18 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4 scrollbar-thin">
+        {/* Direct Items (Dashboard) */}
+        {directItems.map((item) => (
+          <DirectMenuItemComponent
+            key={item.id}
+            item={item}
+            activeItem={activeItem}
+            setActiveItem={setActiveItem}
+            isCollapsed={isCollapsed}
+          />
+        ))}
+        
+        {/* Section Items */}
         {menuItems.map((item) => (
           <MenuSection
             key={item.id}
@@ -387,43 +461,29 @@ export function Sidebar() {
 
       {/* Profile Menu Dropdown */}
       {showProfileMenu && !isCollapsed && (
-        <div className="absolute bottom-24 left-4 right-4 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-in">
-          {/* Profile Header */}
-          <div className="p-4 border-b border-gray-100 bg-gradient-to-br from-gray-50 to-white">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-red-500 flex items-center justify-center shadow-lg shadow-primary/20">
-                <span className="text-white font-bold text-lg">AG</span>
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900">Administrador</p>
-                <p className="text-xs text-primary font-medium">Administrador General</p>
-                <p className="text-xs text-gray-400">admin@caritas.org</p>
-              </div>
-            </div>
-          </div>
-          
+        <div className="absolute bottom-20 left-4 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-in">
           {/* Menu Options */}
-          <div className="py-2">
-            <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <User size={18} className="text-gray-400 group-hover:text-primary transition-colors" />
-              Mi Perfil
+          <div className="py-1.5">
+            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <User size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
+              Mi perfil
             </button>
-            <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <Settings size={18} className="text-gray-400 group-hover:text-primary transition-colors" />
+            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <Settings size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
               Configuración
             </button>
-            <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <Bell size={18} className="text-gray-400 group-hover:text-primary transition-colors" />
+            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <Bell size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
               Notificaciones
             </button>
-            <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
-              <HelpCircle size={18} className="text-gray-400 group-hover:text-primary transition-colors" />
+            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors group">
+              <HelpCircle size={16} className="text-gray-400 group-hover:text-primary transition-colors" />
               Ayuda
             </button>
-            <div className="my-2 border-t border-gray-100" />
-            <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-primary hover:bg-primary/5 transition-colors font-medium">
-              <LogOut size={18} />
-              Cerrar Sesión
+            <div className="my-1.5 border-t border-gray-100" />
+            <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-primary hover:bg-primary/5 transition-colors font-medium">
+              <LogOut size={16} />
+              Cerrar sesión
             </button>
           </div>
         </div>
@@ -432,7 +492,7 @@ export function Sidebar() {
       {/* Footer - Profile Selector */}
       <div className="border-t border-gray-100" ref={profileRef}>
         {isCollapsed ? (
-          <Tooltip text="Familia García - Padre" show={true}>
+          <Tooltip text="Administrador" show={true}>
             <button 
               onClick={() => {
                 setShowProfileMenu(!showProfileMenu)
@@ -441,8 +501,8 @@ export function Sidebar() {
               }}
               className="w-full flex items-center justify-center p-3 hover:bg-gray-50 transition-colors"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center border border-blue-200">
-                <span className="text-sm font-bold text-blue-600">FG</span>
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/20 ring-2 ring-primary/10">
+                <User size={18} className="text-white" />
               </div>
             </button>
           </Tooltip>
@@ -452,19 +512,27 @@ export function Sidebar() {
               setShowProfileMenu(!showProfileMenu)
               setShowNotifications(false)
             }}
-            className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors group"
+            className="w-full flex items-center gap-3 p-4 hover:bg-gradient-to-r hover:from-gray-50 hover:to-transparent transition-all duration-300 group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center border border-blue-200 group-hover:shadow-md transition-shadow">
-              <span className="text-sm font-bold text-blue-600">FG</span>
+            <div className="relative">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/25 group-hover:shadow-primary/40 group-hover:scale-105 transition-all duration-300 ring-2 ring-primary/10">
+                <User size={20} className="text-white" />
+              </div>
+              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white shadow-sm" />
             </div>
-            <div className="flex-1 text-left">
-              <p className="text-sm font-semibold text-gray-900">Familia García</p>
-              <p className="text-xs text-gray-500">Padre</p>
+            <div className="flex-1 text-left min-w-0">
+              <p className="text-sm font-semibold text-gray-900 group-hover:text-primary transition-colors truncate">Administrador</p>
+              <div className="flex items-center gap-1.5">
+                <Mail size={11} className="text-gray-400 shrink-0" />
+                <p className="text-xs text-gray-500 truncate">admin@caritas.org</p>
+              </div>
             </div>
-            <ChevronDown 
-              size={18} 
-              className={`text-gray-400 transition-transform duration-200 ${showProfileMenu ? "rotate-180" : ""}`} 
-            />
+            <div className={`p-1.5 rounded-lg bg-gray-100 group-hover:bg-primary/10 transition-all duration-200 ${showProfileMenu ? "bg-primary/10" : ""}`}>
+              <ChevronDown 
+                size={16} 
+                className={`text-gray-400 group-hover:text-primary transition-all duration-300 ${showProfileMenu ? "rotate-180 text-primary" : ""}`} 
+              />
+            </div>
           </button>
         )}
       </div>
