@@ -51,19 +51,24 @@ interface MenuItem {
   children: SubMenuItem[]
 }
 
+// Direct menu item for Dashboard (no section header needed)
+interface DirectMenuItem {
+  id: string
+  label: string
+  icon: React.ReactNode
+  href: string
+  isDirect: true
+}
+
+const directItems: DirectMenuItem[] = [
+  { id: "dashboard", label: "Dashboard", icon: <Home size={18} />, href: "/dashboard", isDirect: true },
+]
+
 const menuItems: MenuItem[] = [
-  {
-    id: "inicio",
-    label: "INICIO",
-    icon: <Home size={20} />,
-    children: [
-      { label: "Dashboard", icon: <Home size={18} />, href: "/dashboard" },
-    ],
-  },
   {
     id: "usuarios",
     label: "USUARIOS",
-    icon: <Users size={20} />,
+    icon: <Users size={18} />,
     children: [
       { label: "Proveedores", icon: <Truck size={18} />, href: "/usuarios/proveedores" },
       { label: "Pacientes", icon: <UserCheck size={18} />, href: "/usuarios/pacientes", badge: "128" },
@@ -73,7 +78,7 @@ const menuItems: MenuItem[] = [
   {
     id: "reportes",
     label: "REPORTES",
-    icon: <FileText size={20} />,
+    icon: <FileText size={18} />,
     children: [
       { label: "Ventas Médicas", icon: <ShoppingCart size={18} />, href: "/reportes/ventas-medicas" },
       { label: "Compras Médicas", icon: <ShoppingBag size={18} />, href: "/reportes/compras-medicas" },
@@ -89,7 +94,7 @@ const menuItems: MenuItem[] = [
   {
     id: "productos",
     label: "PRODUCTOS",
-    icon: <Package size={20} />,
+    icon: <Package size={18} />,
     children: [
       { label: "Tratamientos", icon: <Pill size={18} />, href: "/productos/tratamientos" },
       { label: "Consultas", icon: <ClipboardList size={18} />, href: "/productos/consultas" },
@@ -101,7 +106,7 @@ const menuItems: MenuItem[] = [
   {
     id: "administracion",
     label: "ADMINISTRACIÓN",
-    icon: <Settings size={20} />,
+    icon: <Settings size={18} />,
     children: [
       { label: "Especialidades", icon: <Layers size={18} />, href: "/administracion/especialidades" },
       { label: "Tipo de Cliente", icon: <Tag size={18} />, href: "/administracion/tipo-cliente" },
@@ -126,6 +131,65 @@ function Tooltip({ children, text, show }: { children: React.ReactNode; text: st
         {text}
         <div className="absolute right-full top-1/2 -translate-y-1/2 border-8 border-transparent border-r-gray-900" />
       </div>
+    </div>
+  )
+}
+
+function DirectMenuItem({ 
+  item, 
+  activeItem, 
+  setActiveItem,
+  isCollapsed,
+}: { 
+  item: DirectMenuItem
+  activeItem: string | null
+  setActiveItem: (item: string | null) => void
+  isCollapsed: boolean
+}) {
+  if (isCollapsed) {
+    return (
+      <div className="mb-2 px-2">
+        <Tooltip text={item.label} show={isCollapsed}>
+          <a
+            href={item.href}
+            onClick={(e) => {
+              e.preventDefault()
+              setActiveItem(item.label)
+            }}
+            className={`w-full flex items-center justify-center p-3 rounded-xl transition-all duration-200 ${
+              activeItem === item.label
+                ? "bg-primary text-white shadow-lg shadow-primary/25"
+                : "text-gray-500 hover:bg-gray-100 hover:text-primary"
+            }`}
+          >
+            {item.icon}
+          </a>
+        </Tooltip>
+      </div>
+    )
+  }
+
+  return (
+    <div className="mb-2 px-2">
+      <a
+        href={item.href}
+        onClick={(e) => {
+          e.preventDefault()
+          setActiveItem(item.label)
+        }}
+        className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
+          activeItem === item.label
+            ? "bg-primary text-white shadow-lg shadow-primary/25"
+            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+        }`}
+      >
+        <span className={`transition-transform duration-200 group-hover:scale-110 ${
+          activeItem === item.label ? "text-white" : "text-gray-400 group-hover:text-primary"
+        }`}>
+          {item.icon}
+        </span>
+        <span className="flex-1">{item.label}</span>
+      </a>
     </div>
   )
 }
@@ -162,17 +226,21 @@ function MenuSection({
   }
 
   return (
-    <div className="mb-2">
+    <div className="mb-1">
       {/* Section Header */}
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider hover:text-gray-600 transition-colors group"
+        className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700 hover:bg-gray-50/50 rounded-lg mx-2 transition-all duration-200 group"
+        style={{ width: 'calc(100% - 16px)' }}
       >
-        <span>{item.label}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-gray-400 group-hover:text-primary transition-colors">{item.icon}</span>
+          <span>{item.label}</span>
+        </div>
         {isExpanded ? (
-          <ChevronDown size={16} className="text-gray-400 group-hover:text-gray-600 transition-transform duration-300" />
+          <ChevronDown size={14} className="text-gray-400 group-hover:text-gray-600 transition-transform duration-300" />
         ) : (
-          <ChevronRight size={16} className="text-gray-400 group-hover:text-gray-600 transition-transform duration-300" />
+          <ChevronRight size={14} className="text-gray-400 group-hover:text-gray-600 transition-transform duration-300" />
         )}
       </button>
       
@@ -222,7 +290,7 @@ function MenuSection({
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)
-  const [expandedSections, setExpandedSections] = useState<string[]>(["inicio", "usuarios"])
+  const [expandedSections, setExpandedSections] = useState<string[]>(["usuarios"])
   const [activeItem, setActiveItem] = useState<string | null>("Dashboard")
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
@@ -370,6 +438,18 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4 scrollbar-thin">
+        {/* Direct Items (Dashboard) */}
+        {directItems.map((item) => (
+          <DirectMenuItem
+            key={item.id}
+            item={item}
+            activeItem={activeItem}
+            setActiveItem={setActiveItem}
+            isCollapsed={isCollapsed}
+          />
+        ))}
+        
+        {/* Section Items */}
         {menuItems.map((item) => (
           <MenuSection
             key={item.id}
