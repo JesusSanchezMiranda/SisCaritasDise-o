@@ -1,5 +1,6 @@
 "use client"
 
+import { AppLayout } from "./app-layout"
 import {
   Users,
   Heart,
@@ -202,20 +203,17 @@ function SectionCard({ item, colorClass }: { item: any; colorClass: string }) {
 }
 
 export default function SectionsPage() {
-  return (
-    <div className="w-full min-h-screen bg-gray-50">
+  const content = (
+    <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-8 py-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Secciones del Sistema SisCaritas</h1>
-          <p className="text-lg text-gray-600">
-            Acceso a todos los módulos de gestión del sistema. Cada sección incluye operaciones CRUD completas.
-          </p>
-        </div>
-      </div>
+      <header className="bg-white border-b border-gray-200 px-8 py-5 shrink-0">
+        <h1 className="text-3xl font-bold text-gray-900 mb-1">Secciones del Sistema SisCaritas</h1>
+        <p className="text-gray-600">Acceso a todos los módulos de gestión del sistema. Cada sección incluye operaciones CRUD completas.</p>
+      </header>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-8 py-12">
+      <div className="flex-1 overflow-y-auto p-8">
+        <div className="max-w-7xl mx-auto">
         <div className="space-y-12">
           {sections.map((section, index) => {
             const SectionIcon = section.icon
@@ -317,4 +315,6 @@ export default function SectionsPage() {
       </div>
     </div>
   )
+  
+  return <AppLayout>{content}</AppLayout>
 }

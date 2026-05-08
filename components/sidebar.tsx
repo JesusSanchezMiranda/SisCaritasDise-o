@@ -289,22 +289,27 @@ function MenuSection({
 
 export function Sidebar() {
   const pathname = usePathname()
-  const [isCollapsed, setIsCollapsed] = useState(false)
-  const [expandedSections, setExpandedSections] = useState<string[]>(["gestion"])
+  const [isCollapsed, setIsCollapsed] = useState(true)
+  const [expandedSections, setExpandedSections] = useState<string[]>([])
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
   const notificationRef = useRef<HTMLDivElement>(null)
 
-  // Determinar qué sección debe estar expandida según la ruta actual
+  // Auto-expand sidebar y sección cuando se navega
   useEffect(() => {
-    const currentPath = pathname.split('/')[1] // Obtener la primera parte de la ruta
+    const currentPath = pathname.split('/')[1]
     
     // Encontrar qué sección contiene este path
     menuItems.forEach(section => {
       const hasChild = section.children.some(child => child.href.includes(currentPath))
-      if (hasChild && !expandedSections.includes(section.id)) {
-        setExpandedSections(prev => [...prev, section.id])
+      if (hasChild) {
+        // Expandir el sidebar
+        if (isCollapsed) setIsCollapsed(false)
+        // Expandir la sección
+        if (!expandedSections.includes(section.id)) {
+          setExpandedSections(prev => [...prev, section.id])
+        }
       }
     })
   }, [pathname])
