@@ -312,6 +312,7 @@ export default function SectionsPage() {
             <p className="text-3xl font-bold text-gray-900">5</p>
           </div>
         </div>
+        </div>
       </div>
     </div>
   )
