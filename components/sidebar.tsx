@@ -14,7 +14,7 @@ import {
   BarChart2,
   Settings,
   UserCircle,
-  ChevronDown,
+  X,
   UserCog,
   Heart,
   HandHelping,
@@ -279,32 +279,37 @@ export function Sidebar() {
         <aside className="w-56 bg-white border-r border-gray-200 flex flex-col shrink-0 shadow-sm">
           {/* Cabecera del Modulo */}
           <div 
-            className="px-4 py-4 flex items-center gap-3"
+            className="px-3 py-3 flex items-center gap-2"
             style={{ backgroundColor: PRIMARY_RED }}
           >
             <span className="text-white">
               {currentModule.icon}
             </span>
-            <span className="text-white font-semibold text-sm flex-1">
+            <span className="bg-white/20 text-white font-medium text-sm px-3 py-1.5 rounded-lg flex-1">
               {currentModule.label}
             </span>
-            <ChevronDown size={18} className="text-white/70" />
+            <button 
+              onClick={() => setActiveModule("dashboard")}
+              className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white hover:bg-white/15 rounded-lg transition-all duration-200"
+              title="Cerrar panel"
+            >
+              <X size={18} />
+            </button>
           </div>
           
           {/* Lista de Secciones */}
-          <nav className="flex-1 py-3 overflow-y-auto">
+          <nav className="flex-1 py-3 px-2 overflow-y-auto">
             {currentModule.sections.map((section, index) => (
               <button
                 key={index}
                 onClick={() => handleSectionClick(section.href)}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-all duration-200 text-left ${
+                className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm transition-all duration-200 text-left rounded-lg mb-0.5 ${
                   isActiveSection(section.href)
-                    ? "bg-red-50 font-medium border-l-[3px]"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-[3px] border-transparent"
+                    ? "bg-red-50 font-medium"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                 }`}
                 style={isActiveSection(section.href) ? { 
-                  color: PRIMARY_RED_LIGHT, 
-                  borderLeftColor: PRIMARY_RED_LIGHT 
+                  color: PRIMARY_RED_LIGHT
                 } : undefined}
               >
                 <span style={isActiveSection(section.href) ? { color: PRIMARY_RED_LIGHT } : { color: '#9CA3AF' }}>
