@@ -6,7 +6,7 @@ import {
   Users,
   FileText,
   Settings,
-  ChevronDown,
+  ChevronRight,
   Truck,
   Stethoscope,
   UserCheck,
@@ -25,10 +25,11 @@ import {
   Boxes,
   PillBottle,
   ShoppingBag,
-  Search,
   LogOut,
   Bell,
-  MoreHorizontal,
+  ChevronLeft,
+  Home,
+  Sparkles,
 } from "lucide-react"
 
 interface SubMenuItem {
@@ -36,104 +37,172 @@ interface SubMenuItem {
   icon: React.ReactNode
   href: string
   badge?: string
+  isNew?: boolean
 }
 
 interface MenuItem {
+  id: string
   label: string
   icon: React.ReactNode
+  color: string
   children: SubMenuItem[]
 }
 
 const menuItems: MenuItem[] = [
   {
-    label: "USUARIOS",
-    icon: <Users size={18} />,
+    id: "usuarios",
+    label: "Usuarios",
+    icon: <Users size={20} />,
+    color: "#9f1239",
     children: [
-      { label: "Proveedores", icon: <Truck size={16} />, href: "/usuarios/proveedores" },
-      { label: "Pacientes", icon: <UserCheck size={16} />, href: "/usuarios/pacientes", badge: "128" },
-      { label: "Médicos", icon: <Stethoscope size={16} />, href: "/usuarios/medicos" },
+      { label: "Proveedores", icon: <Truck size={18} />, href: "/usuarios/proveedores" },
+      { label: "Pacientes", icon: <UserCheck size={18} />, href: "/usuarios/pacientes", badge: "128" },
+      { label: "Médicos", icon: <Stethoscope size={18} />, href: "/usuarios/medicos", isNew: true },
     ],
   },
   {
-    label: "REPORTES",
-    icon: <FileText size={18} />,
+    id: "reportes",
+    label: "Reportes",
+    icon: <FileText size={20} />,
+    color: "#1e3a5f",
     children: [
-      { label: "Ventas Médicas", icon: <ShoppingCart size={16} />, href: "/reportes/ventas-medicas" },
-      { label: "Compras Médicas", icon: <ShoppingBag size={16} />, href: "/reportes/compras-medicas" },
-      { label: "Laboratorio", icon: <FlaskConical size={16} />, href: "/reportes/laboratorio" },
-      { label: "Productos", icon: <Package size={16} />, href: "/reportes/productos" },
-      { label: "Tratamientos", icon: <Pill size={16} />, href: "/reportes/tratamientos" },
-      { label: "Consultas", icon: <ClipboardList size={16} />, href: "/reportes/consultas" },
-      { label: "Terapias", icon: <Activity size={16} />, href: "/reportes/terapias" },
-      { label: "Pacientes", icon: <Heart size={16} />, href: "/reportes/pacientes" },
-      { label: "Ranking", icon: <Trophy size={16} />, href: "/reportes/ranking" },
+      { label: "Ventas Médicas", icon: <ShoppingCart size={18} />, href: "/reportes/ventas-medicas" },
+      { label: "Compras Médicas", icon: <ShoppingBag size={18} />, href: "/reportes/compras-medicas" },
+      { label: "Laboratorio", icon: <FlaskConical size={18} />, href: "/reportes/laboratorio" },
+      { label: "Productos", icon: <Package size={18} />, href: "/reportes/productos" },
+      { label: "Tratamientos", icon: <Pill size={18} />, href: "/reportes/tratamientos" },
+      { label: "Consultas", icon: <ClipboardList size={18} />, href: "/reportes/consultas" },
+      { label: "Terapias", icon: <Activity size={18} />, href: "/reportes/terapias" },
+      { label: "Pacientes", icon: <Heart size={18} />, href: "/reportes/pacientes" },
+      { label: "Ranking", icon: <Trophy size={18} />, href: "/reportes/ranking", isNew: true },
     ],
   },
   {
-    label: "ADMINISTRACIÓN",
-    icon: <Settings size={18} />,
+    id: "administracion",
+    label: "Administración",
+    icon: <Settings size={20} />,
+    color: "#4a5568",
     children: [
-      { label: "Especialidades", icon: <Layers size={16} />, href: "/administracion/especialidades" },
-      { label: "Tipo de Cliente", icon: <Tag size={16} />, href: "/administracion/tipo-cliente" },
-      { label: "Precios de Terapias", icon: <DollarSign size={16} />, href: "/administracion/precios-terapias" },
-      { label: "Precio de Consultas", icon: <DollarSign size={16} />, href: "/administracion/precio-consultas" },
-      { label: "Tratamientos", icon: <Pill size={16} />, href: "/administracion/tratamientos" },
-      { label: "Pruebas Laboratorio", icon: <TestTube size={16} />, href: "/administracion/pruebas-laboratorio" },
-      { label: "Kits Laboratorio", icon: <Boxes size={16} />, href: "/administracion/kits-laboratorio" },
-      { label: "Medicamentos", icon: <PillBottle size={16} />, href: "/administracion/medicamentos" },
-      { label: "Productos", icon: <Package size={16} />, href: "/administracion/productos" },
-      { label: "Compras", icon: <ShoppingCart size={16} />, href: "/administracion/compras" },
+      { label: "Especialidades", icon: <Layers size={18} />, href: "/administracion/especialidades" },
+      { label: "Tipo de Cliente", icon: <Tag size={18} />, href: "/administracion/tipo-cliente" },
+      { label: "Precios de Terapias", icon: <DollarSign size={18} />, href: "/administracion/precios-terapias" },
+      { label: "Precio de Consultas", icon: <DollarSign size={18} />, href: "/administracion/precio-consultas" },
+      { label: "Tratamientos", icon: <Pill size={18} />, href: "/administracion/tratamientos" },
+      { label: "Pruebas Laboratorio", icon: <TestTube size={18} />, href: "/administracion/pruebas-laboratorio" },
+      { label: "Kits Laboratorio", icon: <Boxes size={18} />, href: "/administracion/kits-laboratorio" },
+      { label: "Medicamentos", icon: <PillBottle size={18} />, href: "/administracion/medicamentos" },
+      { label: "Productos", icon: <Package size={18} />, href: "/administracion/productos" },
+      { label: "Compras", icon: <ShoppingCart size={18} />, href: "/administracion/compras" },
     ],
   },
 ]
 
-function MenuSection({ item, defaultOpen = false }: { item: MenuItem; defaultOpen?: boolean }) {
-  const [isOpen, setIsOpen] = useState(defaultOpen)
-  const [activeItem, setActiveItem] = useState<string | null>(null)
-
+function MenuSection({ 
+  item, 
+  isExpanded, 
+  onToggle, 
+  activeItem, 
+  setActiveItem,
+  isCollapsed 
+}: { 
+  item: MenuItem
+  isExpanded: boolean
+  onToggle: () => void
+  activeItem: string | null
+  setActiveItem: (item: string | null) => void
+  isCollapsed: boolean
+}) {
   return (
-    <div className="mb-2">
+    <div className="mb-1">
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-3 py-2 text-[11px] font-semibold tracking-wider text-muted-foreground hover:text-foreground transition-colors duration-200"
+        onClick={onToggle}
+        className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden ${
+          isExpanded 
+            ? "bg-accent/80" 
+            : "hover:bg-accent/50"
+        }`}
+        style={{
+          borderLeft: isExpanded ? `3px solid ${item.color}` : "3px solid transparent"
+        }}
       >
-        <div className="flex items-center gap-2">
-          <span className="opacity-70">{item.icon}</span>
-          <span>{item.label}</span>
+        <div 
+          className={`p-2 rounded-lg transition-all duration-300 ${
+            isExpanded ? "scale-110" : "group-hover:scale-105"
+          }`}
+          style={{ 
+            backgroundColor: `${item.color}20`,
+            color: item.color
+          }}
+        >
+          {item.icon}
         </div>
-        <ChevronDown
-          size={14}
-          className={`transition-transform duration-300 ease-out ${isOpen ? "rotate-0" : "-rotate-90"}`}
-        />
+        {!isCollapsed && (
+          <>
+            <span className={`flex-1 text-left font-medium transition-colors duration-200 ${
+              isExpanded ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
+            }`}>
+              {item.label}
+            </span>
+            <ChevronRight
+              size={16}
+              className={`text-muted-foreground transition-all duration-300 ${
+                isExpanded ? "rotate-90 text-foreground" : "group-hover:translate-x-0.5"
+              }`}
+            />
+          </>
+        )}
+        {isExpanded && (
+          <div 
+            className="absolute inset-0 opacity-10 animate-shimmer"
+            style={{ backgroundColor: item.color }}
+          />
+        )}
       </button>
       
       <div
-        className={`overflow-hidden transition-all duration-300 ease-out ${
-          isOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+        className={`overflow-hidden transition-all duration-400 ease-out ${
+          isExpanded && !isCollapsed ? "max-h-[600px] opacity-100 mt-1" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="mt-1 space-y-0.5">
+        <div className="pl-4 space-y-0.5">
           {item.children.map((child, index) => (
             <a
               key={index}
               href={child.href}
-              onClick={() => setActiveItem(child.label)}
-              className={`group flex items-center gap-3 px-3 py-2.5 mx-2 rounded-lg text-sm transition-all duration-200 ${
+              onClick={(e) => {
+                e.preventDefault()
+                setActiveItem(child.label)
+              }}
+              className={`group/item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 relative ${
                 activeItem === child.label
-                  ? "bg-primary/15 text-primary"
-                  : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                  ? "bg-primary/15 text-primary-foreground"
+                  : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
               }`}
+              style={{
+                animationDelay: `${index * 50}ms`,
+              }}
             >
-              <span className={`transition-colors duration-200 ${
-                activeItem === child.label ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+              <span className={`transition-all duration-200 ${
+                activeItem === child.label 
+                  ? "text-primary scale-110" 
+                  : "group-hover/item:scale-110 group-hover/item:text-foreground"
               }`}>
                 {child.icon}
               </span>
               <span className="flex-1">{child.label}</span>
               {child.badge && (
-                <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-primary/20 text-primary">
+                <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-primary/25 text-primary-foreground border border-primary/30">
                   {child.badge}
                 </span>
+              )}
+              {child.isNew && (
+                <span className="flex items-center gap-1 px-1.5 py-0.5 text-[9px] font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  <Sparkles size={10} />
+                  NEW
+                </span>
+              )}
+              {activeItem === child.label && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-full" />
               )}
             </a>
           ))}
@@ -144,79 +213,138 @@ function MenuSection({ item, defaultOpen = false }: { item: MenuItem; defaultOpe
 }
 
 export function Sidebar() {
+  const [expandedSection, setExpandedSection] = useState<string | null>("usuarios")
+  const [activeItem, setActiveItem] = useState<string | null>("Pacientes")
+  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isHovering, setIsHovering] = useState(false)
+
+  const toggleSection = (id: string) => {
+    setExpandedSection(prev => prev === id ? null : id)
+  }
+
   return (
-    <aside className="w-72 h-screen bg-card flex flex-col border-r border-border">
-      {/* Logo Section */}
-      <div className="p-5 flex items-center gap-3">
-        <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-background flex items-center justify-center p-1">
-          <Image
-            src="/logo-caritas.png"
-            alt="Cáritas Logo"
-            width={40}
-            height={40}
-            className="object-contain"
-          />
+    <aside 
+      className={`h-screen bg-card flex flex-col border-r border-border relative transition-all duration-300 ${
+        isCollapsed ? "w-20" : "w-72"
+      }`}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      {/* Collapse Toggle */}
+      <button
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className={`absolute -right-3 top-20 z-10 p-1.5 rounded-full bg-accent border border-border shadow-lg transition-all duration-300 hover:bg-primary/20 hover:border-primary/50 ${
+          isHovering ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <ChevronLeft size={14} className={`text-muted-foreground transition-transform duration-300 ${
+          isCollapsed ? "rotate-180" : ""
+        }`} />
+      </button>
+
+      {/* Logo Section - Prominente */}
+      <div className={`p-4 ${isCollapsed ? "px-2" : ""}`}>
+        <div className={`flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-br from-accent/80 to-muted/50 border border-border/50 transition-all duration-300 ${
+          isCollapsed ? "justify-center" : ""
+        }`}>
+          <div className="relative group">
+            <div className="absolute inset-0 bg-primary/30 rounded-xl blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center p-1.5 animate-float border border-primary/20">
+              <Image
+                src="/logo-caritas.png"
+                alt="Cáritas Logo"
+                width={48}
+                height={48}
+                className="object-contain drop-shadow-lg"
+              />
+            </div>
+            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-card flex items-center justify-center">
+              <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping" />
+            </div>
+          </div>
+          {!isCollapsed && (
+            <div className="flex-1">
+              <h1 className="text-lg font-bold text-foreground tracking-tight">Sis Caritas</h1>
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                <p className="text-[11px] text-muted-foreground">Sistema Activo</p>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="flex-1">
-          <h1 className="text-base font-bold text-foreground tracking-tight">Sis Caritas</h1>
-          <p className="text-[11px] text-muted-foreground">Sistema de Gestión</p>
-        </div>
-        <button className="p-2 rounded-lg hover:bg-accent transition-colors">
-          <MoreHorizontal size={18} className="text-muted-foreground" />
-        </button>
       </div>
 
-      {/* Search */}
-      <div className="px-4 mb-4">
-        <div className="relative">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Buscar..."
-            className="w-full pl-9 pr-4 py-2.5 bg-background border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-200"
-          />
-          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground bg-muted rounded border border-border">
-            ⌘K
-          </kbd>
+      {/* Quick Nav */}
+      {!isCollapsed && (
+        <div className="px-4 mb-4">
+          <div className="flex items-center gap-2 p-2 rounded-xl bg-accent/50 border border-border/50">
+            <button className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-primary/15 text-primary-foreground text-sm font-medium transition-all hover:bg-primary/25">
+              <Home size={16} />
+              Inicio
+            </button>
+            <button className="relative p-2 rounded-lg hover:bg-accent transition-all group">
+              <Bell size={18} className="text-muted-foreground group-hover:text-foreground transition-colors" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full animate-pulse" />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-2 pb-4">
-        {menuItems.map((item, index) => (
-          <MenuSection key={index} item={item} defaultOpen={index === 0} />
-        ))}
+      <nav className={`flex-1 overflow-y-auto px-3 pb-4 ${isCollapsed ? "px-2" : ""}`}>
+        <div className="space-y-1">
+          {menuItems.map((item) => (
+            <MenuSection
+              key={item.id}
+              item={item}
+              isExpanded={expandedSection === item.id}
+              onToggle={() => toggleSection(item.id)}
+              activeItem={activeItem}
+              setActiveItem={setActiveItem}
+              isCollapsed={isCollapsed}
+            />
+          ))}
+        </div>
       </nav>
 
-      {/* Notifications Banner */}
-      <div className="mx-4 mb-4 p-3 rounded-xl bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/20">
-        <div className="flex items-start gap-3">
-          <div className="p-2 rounded-lg bg-primary/20">
-            <Bell size={16} className="text-primary" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium text-foreground">3 notificaciones nuevas</p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">Revisar citas pendientes</p>
+      {/* Stats Mini */}
+      {!isCollapsed && (
+        <div className="mx-4 mb-4 p-4 rounded-xl bg-gradient-to-br from-primary/10 via-accent/50 to-secondary/10 border border-primary/10">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="text-center p-2 rounded-lg bg-background/50">
+              <p className="text-xl font-bold text-foreground">156</p>
+              <p className="text-[10px] text-muted-foreground">Citas Hoy</p>
+            </div>
+            <div className="text-center p-2 rounded-lg bg-background/50">
+              <p className="text-xl font-bold text-primary-foreground">23</p>
+              <p className="text-[10px] text-muted-foreground">Pendientes</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* User Profile */}
-      <div className="p-4 border-t border-border">
-        <div className="flex items-center gap-3">
+      <div className={`p-4 border-t border-border ${isCollapsed ? "px-2" : ""}`}>
+        <div className={`flex items-center gap-3 p-2 rounded-xl hover:bg-accent/50 transition-all duration-300 cursor-pointer group ${
+          isCollapsed ? "justify-center" : ""
+        }`}>
           <div className="relative">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <span className="text-sm font-semibold text-white">AD</span>
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary via-primary/80 to-secondary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-shadow duration-300">
+              <span className="text-sm font-bold text-primary-foreground">AD</span>
             </div>
-            <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-card rounded-full" />
+            <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-card rounded-full" />
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground truncate">Administrador</p>
-            <p className="text-[11px] text-muted-foreground truncate">admin@caritas.org</p>
-          </div>
-          <button className="p-2 rounded-lg hover:bg-accent transition-colors group">
-            <LogOut size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
-          </button>
+          {!isCollapsed && (
+            <>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-foreground truncate">Admin</p>
+                <p className="text-[11px] text-muted-foreground truncate">Super Admin</p>
+              </div>
+              <button className="p-2 rounded-lg hover:bg-primary/15 transition-all group/logout">
+                <LogOut size={18} className="text-muted-foreground group-hover/logout:text-primary transition-colors" />
+              </button>
+            </>
+          )}
         </div>
       </div>
     </aside>

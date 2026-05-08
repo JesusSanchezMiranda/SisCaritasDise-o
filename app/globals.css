@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0b;
-  --foreground: #fafafa;
-  --card: #111113;
-  --card-foreground: #fafafa;
-  --primary: #a83254;
-  --primary-foreground: #ffffff;
+  --background: #0c0c0e;
+  --foreground: #e4e4e7;
+  --card: #121215;
+  --card-foreground: #e4e4e7;
+  --primary: #9f1239;
+  --primary-foreground: #fecdd3;
   --secondary: #1e3a5f;
-  --secondary-foreground: #ffffff;
+  --secondary-foreground: #bfdbfe;
   --muted: #18181b;
-  --muted-foreground: #a1a1aa;
-  --accent: #27272a;
-  --accent-foreground: #fafafa;
-  --border: #27272a;
-  --ring: #a83254;
+  --muted-foreground: #71717a;
+  --accent: #1f1f23;
+  --accent-foreground: #d4d4d8;
+  --border: #1f1f23;
+  --ring: #9f1239;
   --radius: 0.75rem;
 }
 
@@ -50,7 +50,7 @@ body {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -58,10 +58,44 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 3px;
+  background: #2a2a2e;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--muted-foreground);
+  background: #3a3a3e;
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(159, 18, 57, 0.3), 0 0 40px rgba(159, 18, 57, 0.1);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(159, 18, 57, 0.5), 0 0 60px rgba(159, 18, 57, 0.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(159, 18, 57, 0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
 }
