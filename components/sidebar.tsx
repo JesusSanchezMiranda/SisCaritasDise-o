@@ -425,8 +425,8 @@ export function Sidebar() {
               }}
               className="w-full flex items-center justify-center p-3 hover:bg-gray-50 transition-colors"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-                <User size={20} className="text-primary" />
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/20 ring-2 ring-primary/10">
+                <User size={18} className="text-white" />
               </div>
             </button>
           </Tooltip>
@@ -436,19 +436,27 @@ export function Sidebar() {
               setShowProfileMenu(!showProfileMenu)
               setShowNotifications(false)
             }}
-            className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors group"
+            className="w-full flex items-center gap-3 p-4 hover:bg-gradient-to-r hover:from-gray-50 hover:to-transparent transition-all duration-300 group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center group-hover:shadow-md transition-shadow">
-              <User size={20} className="text-primary" />
+            <div className="relative">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/25 group-hover:shadow-primary/40 group-hover:scale-105 transition-all duration-300 ring-2 ring-primary/10">
+                <User size={20} className="text-white" />
+              </div>
+              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white shadow-sm" />
             </div>
-            <div className="flex-1 text-left">
-              <p className="text-sm font-semibold text-gray-900">Administrador</p>
-              <p className="text-xs text-gray-500">admin@caritas.org</p>
+            <div className="flex-1 text-left min-w-0">
+              <p className="text-sm font-semibold text-gray-900 group-hover:text-primary transition-colors truncate">Administrador</p>
+              <div className="flex items-center gap-1.5">
+                <Mail size={11} className="text-gray-400 shrink-0" />
+                <p className="text-xs text-gray-500 truncate">admin@caritas.org</p>
+              </div>
             </div>
-            <ChevronDown 
-              size={18} 
-              className={`text-gray-400 transition-transform duration-200 ${showProfileMenu ? "rotate-180" : ""}`} 
-            />
+            <div className={`p-1.5 rounded-lg bg-gray-100 group-hover:bg-primary/10 transition-all duration-200 ${showProfileMenu ? "bg-primary/10" : ""}`}>
+              <ChevronDown 
+                size={16} 
+                className={`text-gray-400 group-hover:text-primary transition-all duration-300 ${showProfileMenu ? "rotate-180 text-primary" : ""}`} 
+              />
+            </div>
           </button>
         )}
       </div>
