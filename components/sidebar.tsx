@@ -185,6 +185,11 @@ const modules: Module[] = [
   },
 ]
 
+// Color principal - rojo vibrante y suave
+const PRIMARY_RED = "#C53030"
+const PRIMARY_RED_LIGHT = "#E53E3E"
+const PRIMARY_RED_HOVER = "#9B2C2C"
+
 export function Sidebar() {
   const pathname = usePathname()
   const router = useRouter()
@@ -223,31 +228,37 @@ export function Sidebar() {
   return (
     <div className="flex h-screen">
       {/* Sidebar Principal - 64px */}
-      <aside className="w-16 bg-[#991b1b] flex flex-col items-center py-4 shrink-0">
-        {/* Logo */}
-        <div className="mb-6">
-          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
+      <aside 
+        className="w-16 flex flex-col items-center py-4 shrink-0"
+        style={{ backgroundColor: PRIMARY_RED }}
+      >
+        {/* Logo y Nombre del Sistema */}
+        <div className="mb-4 flex flex-col items-center">
+          <div className="w-11 h-11 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-md">
             <Image
               src="/logo-caritas.png"
               alt="Caritas Logo"
-              width={32}
-              height={32}
+              width={36}
+              height={36}
               className="object-contain"
             />
           </div>
+          <span className="text-white/90 text-[8px] font-medium mt-1 tracking-wide">SisCaritas</span>
+          <span className="text-white/60 text-[6px] mt-0.5 px-1.5 py-0.5 bg-white/10 rounded-full">v1.0</span>
         </div>
         
         {/* Iconos de Modulos */}
-        <nav className="flex-1 flex flex-col items-center gap-2 w-full px-2">
+        <nav className="flex-1 flex flex-col items-center gap-1.5 w-full px-2">
           {modules.map((module) => (
             <button
               key={module.id}
               onClick={() => handleModuleClick(module.id)}
-              className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${
+              className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-200 ${
                 activeModule === module.id
-                  ? "bg-white text-[#991b1b]"
-                  : "text-white hover:bg-white/10"
+                  ? "bg-white shadow-md"
+                  : "text-white hover:bg-white/15"
               }`}
+              style={activeModule === module.id ? { color: PRIMARY_RED } : undefined}
               title={module.label}
             >
               {module.icon}
@@ -257,7 +268,7 @@ export function Sidebar() {
         
         {/* Avatar Usuario */}
         <div className="mt-auto pt-4">
-          <button className="w-12 h-12 rounded-xl flex items-center justify-center text-white hover:bg-white/10 transition-all duration-200">
+          <button className="w-11 h-11 rounded-xl flex items-center justify-center text-white hover:bg-white/15 transition-all duration-200">
             <UserCircle size={26} />
           </button>
         </div>
@@ -265,9 +276,12 @@ export function Sidebar() {
       
       {/* Panel Secundario - ~220px */}
       {currentModule && currentModule.sections.length > 0 && (
-        <aside className="w-56 bg-white border-r border-gray-200 flex flex-col shrink-0">
+        <aside className="w-56 bg-white border-r border-gray-200 flex flex-col shrink-0 shadow-sm">
           {/* Cabecera del Modulo */}
-          <div className="bg-[#991b1b] px-4 py-4 flex items-center gap-3">
+          <div 
+            className="px-4 py-4 flex items-center gap-3"
+            style={{ backgroundColor: PRIMARY_RED }}
+          >
             <span className="text-white">
               {currentModule.icon}
             </span>
@@ -278,18 +292,22 @@ export function Sidebar() {
           </div>
           
           {/* Lista de Secciones */}
-          <nav className="flex-1 py-2 overflow-y-auto">
+          <nav className="flex-1 py-3 overflow-y-auto">
             {currentModule.sections.map((section, index) => (
               <button
                 key={index}
                 onClick={() => handleSectionClick(section.href)}
                 className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-all duration-200 text-left ${
                   isActiveSection(section.href)
-                    ? "bg-red-50 text-[#DC2626] border-l-[3px] border-[#DC2626] font-medium"
-                    : "text-gray-600 hover:bg-red-50/50 hover:text-gray-900 border-l-[3px] border-transparent"
+                    ? "bg-red-50 font-medium border-l-[3px]"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-[3px] border-transparent"
                 }`}
+                style={isActiveSection(section.href) ? { 
+                  color: PRIMARY_RED_LIGHT, 
+                  borderLeftColor: PRIMARY_RED_LIGHT 
+                } : undefined}
               >
-                <span className={isActiveSection(section.href) ? "text-[#DC2626]" : "text-gray-400"}>
+                <span style={isActiveSection(section.href) ? { color: PRIMARY_RED_LIGHT } : { color: '#9CA3AF' }}>
                   {section.icon}
                 </span>
                 <span>{section.label}</span>
@@ -300,7 +318,10 @@ export function Sidebar() {
           {/* Footer del Modulo */}
           <div className="p-4 border-t border-gray-100">
             <div className="flex justify-center">
-              <span className="px-3 py-1.5 rounded-full border border-[#DC2626] text-[#DC2626] text-xs font-medium">
+              <span 
+                className="px-3 py-1.5 rounded-full border text-xs font-medium"
+                style={{ borderColor: PRIMARY_RED_LIGHT, color: PRIMARY_RED_LIGHT }}
+              >
                 Modulo: {currentModule.label}
               </span>
             </div>
