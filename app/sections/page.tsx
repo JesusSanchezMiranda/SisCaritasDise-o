@@ -1,6 +1,6 @@
 "use client"
 
-import { AppLayout } from "../app-layout"
+import { AppLayout } from "./app-layout"
 import {
   Users,
   Heart,
