@@ -1,6 +1,6 @@
 "use client"
 
-import { Sidebar } from "@/components/sidebar"
+import { AppLayout } from "./app-layout"
 import { 
   Users, 
   FileText, 
@@ -17,9 +17,8 @@ import {
 
 export default function Home() {
   return (
-    <div className="flex w-full h-screen bg-gray-50 overflow-hidden">
-      <Sidebar />
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+    <AppLayout>
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Header */}
         <header className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-200 shrink-0">
           <div>
@@ -187,7 +186,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </AppLayout>
   )
 }
