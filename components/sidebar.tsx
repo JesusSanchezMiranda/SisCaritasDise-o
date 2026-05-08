@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import {
   Users,
@@ -25,10 +25,7 @@ import {
   Boxes,
   PillBottle,
   ShoppingBag,
-  LogOut,
-  Bell,
   ChevronRight,
-  Home,
   Menu,
   X,
   Sparkles,
@@ -229,13 +226,6 @@ export function Sidebar() {
   const [expandedSection, setExpandedSection] = useState<string | null>("usuarios")
   const [activeItem, setActiveItem] = useState<string | null>("Pacientes")
   const [isCollapsed, setIsCollapsed] = useState(false)
-  const [currentTime, setCurrentTime] = useState(new Date())
-  const [notifications] = useState(5)
-
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000)
-    return () => clearInterval(timer)
-  }, [])
 
   const toggleSection = (id: string) => {
     setExpandedSection(prev => prev === id ? null : id)
@@ -298,48 +288,8 @@ export function Sidebar() {
         </div>
       </div>
 
-      {/* Quick Actions */}
-      {!isCollapsed && (
-        <div className="px-4 py-3 border-b border-gray-100">
-          <div className="flex items-center gap-2">
-            <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98]">
-              <Home size={16} />
-              <span className="text-sm font-medium">Inicio</span>
-            </button>
-            <button className="relative p-2.5 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 transition-all hover:scale-105 active:scale-95">
-              <Bell size={18} />
-              {notifications > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg animate-bounce">
-                  {notifications}
-                </span>
-              )}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Time Display */}
-      {!isCollapsed && (
-        <div className="px-4 py-3">
-          <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-gray-50 to-gray-100/50 rounded-xl border border-gray-200">
-            <div>
-              <p className="text-2xl font-bold text-gray-900">
-                {currentTime.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
-              </p>
-              <p className="text-xs text-gray-500 capitalize">
-                {currentTime.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' })}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-xs font-semibold text-primary">Turno</p>
-              <p className="text-sm font-bold text-gray-700">Mañana</p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Navigation */}
-      <nav className={`flex-1 overflow-y-auto ${isCollapsed ? "px-2 py-4" : "px-3 pb-4"}`}>
+      <nav className={`flex-1 overflow-y-auto ${isCollapsed ? "px-2 py-4" : "px-3 py-4"}`}>
         {!isCollapsed && (
           <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider px-4 mb-3">
             Navegación
@@ -359,55 +309,6 @@ export function Sidebar() {
           ))}
         </div>
       </nav>
-
-      {/* Stats Mini Card */}
-      {!isCollapsed && (
-        <div className="px-4 pb-3">
-          <div className="p-4 bg-gradient-to-br from-primary/5 via-white to-primary/10 rounded-xl border border-primary/20">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-gray-700">Hoy</span>
-              <span className="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full font-medium">En vivo</span>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="text-center p-2 bg-white rounded-lg shadow-sm border border-gray-100">
-                <p className="text-xl font-bold text-primary">24</p>
-                <p className="text-[10px] text-gray-500">Citas</p>
-              </div>
-              <div className="text-center p-2 bg-white rounded-lg shadow-sm border border-gray-100">
-                <p className="text-xl font-bold text-emerald-600">18</p>
-                <p className="text-[10px] text-gray-500">Atendidos</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* User Profile */}
-      <div className={`border-t border-gray-200 bg-gray-50 ${isCollapsed ? "p-2" : "p-4"}`}>
-        <div className={`flex items-center gap-3 ${isCollapsed ? "justify-center" : "p-3 bg-white rounded-xl shadow-sm border border-gray-100"}`}>
-          {/* Avatar */}
-          <div className="relative">
-            <div className={`bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 ${
-              isCollapsed ? "w-10 h-10" : "w-11 h-11"
-            }`}>
-              <span className="text-sm font-bold text-white">AD</span>
-            </div>
-            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
-          </div>
-
-          {!isCollapsed && (
-            <>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">Administrador</p>
-                <p className="text-xs text-gray-500 truncate">Super Admin</p>
-              </div>
-              <button className="p-2 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/10 transition-all">
-                <LogOut size={18} />
-              </button>
-            </>
-          )}
-        </div>
-      </div>
     </aside>
   )
 }
