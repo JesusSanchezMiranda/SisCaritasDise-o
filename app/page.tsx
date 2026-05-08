@@ -1,6 +1,5 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
 import { Sidebar } from "@/components/sidebar"
 import { 
   Users, 
@@ -14,174 +13,24 @@ import {
   Heart, 
   Stethoscope, 
   Package,
-  Bell,
-  User,
-  LogOut,
-  ChevronDown,
-  X
 } from "lucide-react"
 
 export default function Home() {
-  const [showProfileMenu, setShowProfileMenu] = useState(false)
-  const [showNotifications, setShowNotifications] = useState(false)
-  const profileRef = useRef<HTMLDivElement>(null)
-  const notificationRef = useRef<HTMLDivElement>(null)
-
-  // Close menus when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
-        setShowProfileMenu(false)
-      }
-      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
-        setShowNotifications(false)
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
-
-  const notifications = [
-    { id: 1, title: "Nueva cita programada", desc: "Dr. García - 14:00", time: "Hace 5 min", unread: true },
-    { id: 2, title: "Paciente registrado", desc: "María López", time: "Hace 15 min", unread: true },
-    { id: 3, title: "Reporte completado", desc: "Ventas mensual", time: "Hace 1 hora", unread: false },
-  ]
-
-  const unreadCount = notifications.filter(n => n.unread).length
-
   return (
     <div className="flex w-full h-screen bg-gray-50 overflow-hidden">
       <Sidebar />
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Header */}
-        <header className="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-200 shrink-0">
+        <header className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-200 shrink-0">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
             <p className="text-sm text-gray-500">Panel de control del sistema Cáritas</p>
           </div>
           
-          <div className="flex items-center gap-4">
-            {/* Date Badge */}
-            <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-600">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-600">
               <Calendar size={16} className="text-primary" />
               <span className="capitalize">{new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' })}</span>
-            </div>
-
-            {/* Notifications */}
-            <div className="relative" ref={notificationRef}>
-              <button 
-                onClick={() => {
-                  setShowNotifications(!showNotifications)
-                  setShowProfileMenu(false)
-                }}
-                className="relative p-2.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200"
-              >
-                <Bell size={20} />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                    {unreadCount}
-                  </span>
-                )}
-              </button>
-
-              {/* Notifications Dropdown */}
-              {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                  <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-                    <h3 className="font-semibold text-gray-900">Notificaciones</h3>
-                    <button 
-                      onClick={() => setShowNotifications(false)}
-                      className="p-1 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                  <div className="max-h-72 overflow-y-auto">
-                    {notifications.map((notif) => (
-                      <div 
-                        key={notif.id} 
-                        className={`px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-50 last:border-0 ${
-                          notif.unread ? "bg-primary/5" : ""
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          {notif.unread && (
-                            <span className="w-2 h-2 mt-2 rounded-full bg-primary shrink-0" />
-                          )}
-                          <div className={notif.unread ? "" : "ml-5"}>
-                            <p className="text-sm font-medium text-gray-900">{notif.title}</p>
-                            <p className="text-xs text-gray-500">{notif.desc}</p>
-                            <p className="text-xs text-gray-400 mt-1">{notif.time}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
-                    <button className="w-full text-center text-sm text-primary font-medium hover:underline">
-                      Ver todas las notificaciones
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Profile */}
-            <div className="relative" ref={profileRef}>
-              <button 
-                onClick={() => {
-                  setShowProfileMenu(!showProfileMenu)
-                  setShowNotifications(false)
-                }}
-                className="flex items-center gap-3 p-2 pr-4 rounded-xl bg-gray-50 border border-gray-200 hover:bg-gray-100 hover:border-gray-300 transition-all duration-200"
-              >
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-md">
-                  <span className="text-sm font-bold text-white">AD</span>
-                </div>
-                <div className="hidden sm:block text-left">
-                  <p className="text-sm font-medium text-gray-900">Administrador</p>
-                  <p className="text-xs text-gray-500">Super Admin</p>
-                </div>
-                <ChevronDown size={16} className={`text-gray-400 transition-transform duration-200 ${showProfileMenu ? "rotate-180" : ""}`} />
-              </button>
-
-              {/* Profile Dropdown */}
-              {showProfileMenu && (
-                <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                  {/* User Info */}
-                  <div className="px-4 py-4 border-b border-gray-100 bg-gradient-to-br from-gray-50 to-white">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/20">
-                        <span className="text-lg font-bold text-white">AD</span>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-900">Administrador</p>
-                        <p className="text-sm text-gray-500">Super Admin</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Menu Options */}
-                  <div className="py-2">
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                      <User size={18} className="text-gray-400" />
-                      Ver Perfil
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                      <Settings size={18} className="text-gray-400" />
-                      Configuración
-                    </button>
-                  </div>
-                  
-                  {/* Logout */}
-                  <div className="border-t border-gray-100 py-2">
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-primary hover:bg-primary/5 transition-colors">
-                      <LogOut size={18} />
-                      Cerrar Sesión
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </header>
